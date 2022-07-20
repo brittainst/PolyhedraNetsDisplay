@@ -2,6 +2,7 @@
 Summer 2022 Jungck Summer Research
 
 Dr. John R. Jungck, Stephen Brittain, Faith Lovell
+
 University of Delaware
 
 functions with the polyhedra net data provided by: https://bitbucket.org/the_real_pdodd/polyhedra_nets/src/master/
