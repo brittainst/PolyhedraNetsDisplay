@@ -19,8 +19,15 @@ with open(filename) as json_file:  # Calls a particular .json file
     # x = data.keys() #Stores as a list the names of all the entries in the dictionary.
 
 
-# graphnet is a function that takes a list of vertices and edges as an input
-# and outputs a plot of the net
+''' 
+Graphnet is a function that takes a list of vertices and edges as an input
+and outputs a plot of the net
+
+:args
+vlist: array of vertices from data
+elist: array of edges from data
+
+'''
 def graphnet(vlist, elist):
     w, z = vlist.T  # not really sure what this does
     plt.scatter(w, z)  # plots the vertices
