@@ -1,8 +1,6 @@
 # when program runs, it will prompt user to enter type of polyhedra net to open, and the
 # number of that net (according to the database) to open. it will then draw the net
 
-# todo: nest code in desired nets folder OR import nets to repository
-
 import json  # Allows us to read json files
 import math
 
