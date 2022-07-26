@@ -136,12 +136,12 @@ def countvc(vlist, elist):
         counter = 0
         for edge in elist:
             if edge[0] == i:
-                counter = counter + 1
+                counter += 1
             if edge[1] == i:
-                counter = counter + 1
+                counter += 1
         if counter == target:
             plt.scatter(vlist[i][0], vlist[i][1], color='black', s=120)
-            numbervc = numbervc + 1
+            numbervc += 1
     print('Number of Vertex Connections = ' + str(numbervc))
 
 
