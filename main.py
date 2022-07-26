@@ -4,6 +4,8 @@
 # todo: nest code in desired nets folder OR import nets to repository
 
 import json  # Allows us to read json files
+import math
+
 import numpy as np
 from matplotlib import pyplot as plt  # Imports matplotlib so we can plot coordinates
 
@@ -17,6 +19,7 @@ with open(filename) as json_file:  # Calls a particular .json file
     v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
     e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
     # x = data.keys() #Stores as a list the names of all the entries in the dictionary.
+    f = np.array(data.get("Faces"))
 
 ''' 
 Graphnet is a function that takes a list of vertices and edges as an input
