@@ -124,11 +124,11 @@ elisT; list of edges from the data
 def countvc(vlist, elist):
     target = 0
     numbervc = 0
-    if name == 'DodecahedronNet':
+    if name == 'Dodecahedron':
         target = 4
-    elif name == 'IcosahedronNet':
+    elif name == 'Icosahedron':
         target = 6
-    elif name == 'OctahedronNet':
+    elif name == 'Octahedron':
         target = 5
     else:
         target = 4
