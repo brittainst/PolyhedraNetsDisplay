@@ -1,18 +1,18 @@
 from functions import *
 
-name = input("Enter the type of polyhedra:")
+name = input("Enter the type of polyhedra:") + 'Net'
 
 numofnets = 0
-if name == 'TetrahedronNet':
+if name == 'Tetrahedron':
     numofnets = 2
     k = 1
-elif name == 'CubeNet':
+elif name == 'Cube':
     numofnets = 11
     k = 2
-elif name == 'OctahedronNet':
+elif name == 'Octahedron':
     numofnets = 11
     k = 2
-elif name == 'DodecahedronNet':
+elif name == 'Dodecahedron':
     numofnets = 43380
     k = 5
 else:

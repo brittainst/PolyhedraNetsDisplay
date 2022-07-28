@@ -1,14 +1,12 @@
 # when program runs, it will prompt user to enter type of polyhedra net to open, and the
 # number of that net (according to the database) to open. it will then draw the net
 
-# todo: nest code in desired nets folder OR import nets to repository
-
 from functions import *
 
 # creates name of the file that needs to be open
 name = input("Enter the type of polyhedra:")
 number = input("Enter the net number:")
-filename = name + str(number) + '.json'
+filename = name + str(number) + 'Net' + '.json'
 
 data = loadfile(name, number)
 v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array

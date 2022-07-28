@@ -102,11 +102,11 @@ countvc is a function that counts vertex connections
 def countvc(nettype, vlist, elist):
     target = 0
     numbervc = 0
-    if nettype == 'DodecahedronNet':
+    if nettype == 'Dodecahedron':
         target = 4
-    elif nettype == 'IcosahedronNet':
+    elif nettype == 'Icosahedron':
         target = 6
-    elif nettype == 'OctahedronNet':
+    elif nettype == 'Octahedron':
         target = 5
     else:
         target = 4
@@ -131,13 +131,13 @@ def giveDegDist(name, number):
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
     facequantity = 0
-    if name == 'TetrahedronNet':
+    if name == 'Tetrahedron':
         facequantity = 4
-    elif name == 'CubeNet':
+    elif name == 'Cube':
         facequantity = 6
-    elif name == 'OctahedronNet':
+    elif name == 'Octahedron':
         facequantity = 8
-    elif name == 'DodecahedronNet':
+    elif name == 'Dodecahedron':
         facequantity = 12
     else:
         facequantity = 20
