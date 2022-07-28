@@ -1,6 +1,6 @@
 from functions import *
 
-name = input("Enter the type of polyhedra:") + 'Net'
+name = input("Enter the type of polyhedra:")
 
 numofnets = 0
 if name == 'Tetrahedron':
