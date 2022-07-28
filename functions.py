@@ -4,11 +4,10 @@ from matplotlib import pyplot as plt  # Imports matplotlib so we can plot coordi
 import json  # Allows us to read json files
 
 
-def loadfile(shapename, filenumber):
-    filename = shapename + str(filenumber) + '.json'
+def loadfile(filename):
     with open(filename) as json_file:  # Calls a particular .json file
         data = json.load(json_file)  # Stores the contents of the database as a list
-    return (data)
+    return data
 
 
 ''' 

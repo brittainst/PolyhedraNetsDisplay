@@ -8,7 +8,7 @@ name = input("Enter the type of polyhedra:")
 number = input("Enter the net number:")
 filename = name + str(number) + 'Net' + '.json'
 
-data = loadfile(name, number)
+data = loadfile(filename)
 v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
 e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
 x = data.keys()  # Stores as a list the names of all the entries in the dictionary.
