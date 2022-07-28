@@ -25,7 +25,8 @@ vcindex = [None for i in range(11)]
 
 for i in range(0, 3000):
     print(i)
-    data = loadfile(name,str(i).zfill(k))
+    filename = name + 'Net' + str(i).zfill(k) + '.json'
+    data = loadfile(filename)
     v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
     e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
     vertexscore = countvc(name,v,e)
