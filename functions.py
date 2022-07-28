@@ -46,7 +46,7 @@ def findcenters(vlist, flist):
     i = -1  # Starts a counter to keep track of which face is selected
 
     for face in flist:
-        i = i + 1  # updates counter for faces
+        i += 1  # updates counter for faces
         centerOfFace = [0, 0]  # Initializes an array to store the centers of the faces
         for vertex in face:
             vcoordinates = vlist[vertex]  # gets coordinates for each vertex in the face
@@ -114,12 +114,12 @@ def countvc(nettype, vlist, elist):
         counter = 0
         for edge in elist:
             if edge[0] == i:
-                counter = counter + 1
+                counter += 1
             if edge[1] == i:
-                counter = counter + 1
+                counter += 1
         if counter == target:
             plt.scatter(vlist[i][0], vlist[i][1], color='black', s=120)
-            numbervc = numbervc + 1
+            numbervc += 1
     return numbervc
 
 '''
@@ -148,9 +148,9 @@ def giveDegDist(name, number):
         deg = 0
         for edge in facegraph:
             if face == int(edge[0]):
-                deg = deg + 1
+                deg += 1
             if face == int(edge[1]):
-                deg = deg + 1
+                deg += 1
         deg = deg/2
         degdistribution[int(deg)-1] = degdistribution[int(deg)-1] + 1
     return(degdistribution)
