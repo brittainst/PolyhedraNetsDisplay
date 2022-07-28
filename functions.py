@@ -3,11 +3,12 @@ import math
 from matplotlib import pyplot as plt  # Imports matplotlib so we can plot coordinates
 import json  # Allows us to read json files
 
+
 def loadfile(shapename, filenumber):
     filename = shapename + str(filenumber) + '.json'
     with open(filename) as json_file:  # Calls a particular .json file
         data = json.load(json_file)  # Stores the contents of the database as a list
-    return(data)
+    return (data)
 
 
 ''' 
@@ -19,6 +20,8 @@ vlist: array of vertices from data
 elist: array of edges from data
 
 '''
+
+
 def graphnet(vlist, elist, clr):
     w, z = vlist.T  # not really sure what this does
     plt.scatter(w, z)  # plots the vertices
@@ -35,8 +38,14 @@ def graphnet(vlist, elist, clr):
         y_values = [point1[1], point2[1]]
         plt.plot(x_values, y_values, color=clr, linestyle="-")
 
+
 '''
 findcenters is a function that finds the centers of the faces of a net
+
+:args
+vlist: array of vertices from data
+flist: array of faces from data
+
 '''
 
 
@@ -96,6 +105,12 @@ def radiusg(vlist, flist):
 
 '''
 countvc is a function that counts vertex connections
+
+:args
+nettype: type of net
+vlist: array of vertices from data
+elist: array of edges from data
+
 '''
 
 
@@ -122,12 +137,18 @@ def countvc(nettype, vlist, elist):
             numbervc += 1
     return numbervc
 
+
 '''
-giveDegDist takes a file name a returns the degree distribution of that net
+giveDegDist takes a file name and returns the degree distribution of that net
+
+:args
+name: net name
+number: number of net
 '''
 
+
 def giveDegDist(name, number):
-    data=loadfile(name,number)
+    data = loadfile((name + 'Net'), number)
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
     facequantity = 0
@@ -142,7 +163,7 @@ def giveDegDist(name, number):
     else:
         facequantity = 20
 
-    degdistribution = [0,0,0,0,0]
+    degdistribution = [0, 0, 0, 0, 0]
 
     for face in range(0, facequantity):
         deg = 0
@@ -151,6 +172,6 @@ def giveDegDist(name, number):
                 deg += 1
             if face == int(edge[1]):
                 deg += 1
-        deg = deg/2
-        degdistribution[int(deg)-1] = degdistribution[int(deg)-1] + 1
-    return(degdistribution)
+        deg = deg / 2
+        degdistribution[int(deg) - 1] = degdistribution[int(deg) - 1] + 1
+    return (degdistribution)
