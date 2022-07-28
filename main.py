@@ -6,7 +6,7 @@ from functions import *
 # creates name of the file that needs to be open
 name = input("Enter the type of polyhedra:")
 number = input("Enter the net number:")
-filename = name + str(number) + 'Net' + '.json'
+filename = name + 'Net' + str(number) + '.json'
 
 data = loadfile(filename)
 v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
