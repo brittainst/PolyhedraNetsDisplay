@@ -147,7 +147,7 @@ number: number of net
 
 
 def giveDegDist(name, number):
-    filename = name + 'Net' + str(number)
+    filename = name + 'Net' + str(number) + '.json'
     data = loadfile(filename)
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
