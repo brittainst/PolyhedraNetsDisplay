@@ -22,4 +22,5 @@ graphnet(findcenters(v, f), facegraph, 'red')  # plots spanning tree of the net
 # print(facegraph)
 # print(f)
 plt.axis('scaled')  # Preserves 1:1 aspect ratio
+plt.xlabel(name + ' Net ' + number)
 plt.show()  # Plots the scatterplot
