@@ -175,3 +175,68 @@ def giveDegDist(name, number):
         deg = deg / 2
         degdistribution[int(deg) - 1] = degdistribution[int(deg) - 1] + 1
     return (degdistribution)
+
+
+'''
+leaves is a function that returns an array of the numbers of which vertices are leaves
+'''
+
+
+def leaves(name, number):
+    filename = name + 'Net' + str(number) + '.json'
+    data = loadfile(filename)
+    facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
+    if name == 'Tetrahedron':
+        facequantity = 4
+    elif name == 'Cube':
+        facequantity = 6
+    elif name == 'Octahedron':
+        facequantity = 8
+    elif name == 'Dodecahedron':
+        facequantity = 12
+    else:
+        facequantity = 20
+
+    listofleaves = []
+
+    for face in range(0, facequantity):
+        deg = 0
+        for edge in facegraph:
+            if face == int(edge[0]):
+                deg += 1
+            if face == int(edge[1]):
+                deg += 1
+        deg = deg / 2
+        if deg == 1:
+            listofleaves.append(face)
+    return listofleaves
+
+
+'''
+diameter is a function that finds the diameter / longest path across the spanning tree
+'''
+
+
+# TODO: This function not finished yet. I need to go back and write sudo code before finishing
+# TODO: Write a function that calculates facequantity based on the type of net
+def diameter(name, number):
+    filename = name + 'Net' + str(number) + '.json'
+    data = loadfile(filename)
+    facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
+    # pulls a list of all the numbers of the leaves in the net
+    listofleaves = leaves(name, number)
+    # starts an array to track the longest path starting from each leaf
+    longestpathsbyvertex = []
+    for i in range(0, len(listofleaves - 1)):  # iterates through each leaf except the last one
+        pathtracker = [i]  # starts the list with the vertex we are starting with
+        for j in range(0, len(pathtracker)):  # iterates through each path in pathtracker
+            numadjfound = 0
+            for edge in facegraph:
+                if int(edge[0]) == i:
+                    if numadjfound == 0:
+                        pathtracker[j].append(int(edge[1]))
+                    else:
+                        pathtracker.append(pathtracker[j])
+                        pathtracker[len(pathtracker)].append(int(edge[1]))
+        longestpathsbyvertex.append(pathtracker)
+    return longestpathsbyvertex
