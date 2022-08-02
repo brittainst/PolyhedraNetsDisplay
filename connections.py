@@ -31,19 +31,19 @@ vcindex = [None for i in range(11)]
 for i in range(0, 3000): # iterates through all nets
     print(i)
     # generates file name needed to call that net
-    #.zfill(k) adds the number of zeros needed in the file name before the file number
+    # .zfill(k) adds the number of zeros needed in the file name before the file number
     filename = name + 'Net' + str(i).zfill(k) + '.json'
-    #laods the target file
+    # laods the target file
     data = loadfile(filename)
     v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
     e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
-    #calculates vertex score of the net we just pulled
+    # calculates vertex score of the net we just pulled
     vertexscore = countvc(name,v,e)
 
-    #adds 1 to the tally for how many nets there are with that many vertex connections
+    # adds 1 to the tally for how many nets there are with that many vertex connections
     vcquantity[vertexscore] += 1
 
-    #adds the number of that net to the corresponding row in the vcindex
+    # adds the number of that net to the corresponding row in the vcindex
     if vcquantity[vertexscore] == 1:
         vcindex[vertexscore] = [i]
     else:
