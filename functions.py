@@ -21,9 +21,10 @@ elist: array of edges from data
 '''
 
 
-def graphnet(vlist, elist, clr):
-    w, z = vlist.T  # not really sure what this does
-    plt.scatter(w, z)  # plots the vertices
+def graphnet(vlist, elist, clr, showvertices):
+    if showvertices == True:
+        w, z = vlist.T  # not really sure what this does
+        plt.scatter(w, z)  # plots the vertices
 
     # For each edge in edge list,
     # Finds the coordinates for each endpoint and plots the line segment
@@ -81,8 +82,6 @@ flist: array of faces from data
 
 def radiusg(vlist, flist):
     FaceCenters = findcenters(vlist, flist)
-    # plt.axis('scaled')
-    # plt.show()
     centermass = [0, 0]  # Initializes a variable for center of mass
     for center in FaceCenters:  # Averages the centers of the faces to find center of mass
         centermass = np.add(centermass, center)
@@ -133,7 +132,7 @@ def countvc(nettype, vlist, elist, scatter):
                 counter += 1
         if counter == target:
             if scatter == True:
-                plt.scatter(vlist[i][0], vlist[i][1], color='black', s=120)
+                plt.scatter(vlist[i][0], vlist[i][1], color='black', s=60)
             numbervc += 1
     return numbervc
 
