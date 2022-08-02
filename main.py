@@ -5,8 +5,11 @@ from functions import *
 
 # creates name of the file that needs to be open
 name = input("Enter the type of polyhedra:")
-#number = input("Enter the net number:")
 
+
+# number = input("Enter the net number:")
+
+# todo: move drawnet to functions
 def drawnet(name, number):
     filename = name + 'Net' + str(number) + '.json'
 
@@ -33,7 +36,7 @@ def drawnet(name, number):
     xcoord = xcoord / len(firstface)
     ycoord = ycoord / len(firstface)
     plt.text(xcoord, ycoord, str(number), fontsize=8, horizontalalignment='center',
-     verticalalignment='center')
+             verticalalignment='center')
     plt.axis('scaled')  # Preserves 1:1 aspect ratio
     plt.xlabel(name + ' Net ' + number + ': V_c = ' + vertconnect)
 
@@ -44,13 +47,16 @@ def drawnet(name, number):
     centermass[0] = centermass[0] / len(FaceCenters)
     centermass[1] = centermass[1] / len(FaceCenters)
 
-    plt.xlim([centermass[0]-7, centermass[0]+7])
-    plt.ylim([centermass[1]-7, centermass[1]+7])
+    plt.xlim([centermass[0] - 7, centermass[0] + 7])
+    plt.ylim([centermass[1] - 7, centermass[1] + 7])
     plt.savefig("output" + str(number) + ".jpg", dpi=600)
     plt.show()  # Plots the scatterplot
 
-array = [35048, 43253, 43374, 19031, 27884, 22840, 41635, 16750, 10337, 33987, 9025, 23207, 33980, 40881, 32036, 5886, 8905, 30578, 35386, 26228, 24269, 10228, 20504, 13528, 42771, 14505, 526]
-array2 = [7725,9023,11463,13645,18975,22159,24417,33681,35048,35934,39346,40685,41417,41971,42758,43227,43253,43374]
+
+array = [35048, 43253, 43374, 19031, 27884, 22840, 41635, 16750, 10337, 33987, 9025, 23207, 33980, 40881, 32036, 5886,
+         8905, 30578, 35386, 26228, 24269, 10228, 20504, 13528, 42771, 14505, 526]
+array2 = [7725, 9023, 11463, 13645, 18975, 22159, 24417, 33681, 35048, 35934, 39346, 40685, 41417, 41971, 42758, 43227,
+          43253, 43374]
 
 for i in array2:
     number = str(i).zfill(5)
