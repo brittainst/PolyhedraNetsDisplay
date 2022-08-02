@@ -176,6 +176,19 @@ def giveDegDist(name, number):
         degdistribution[int(deg) - 1] = degdistribution[int(deg) - 1] + 1
     return (degdistribution)
 
+'''
+degree is a function that takes a vertex and an edge list 
+and returns the degree (number of incident edges) of that vertex
+'''
+
+def degree(v, elist):
+    deg = 0
+    for e in elist:
+        if v == int(e[0]):
+            deg += 1
+        if v == int(e[1]):
+            deg += 1
+    return deg
 
 '''
 leaves is a function that returns an array of the numbers of which vertices are leaves
@@ -210,6 +223,7 @@ def leaves(name, number):
         if deg == 1:
             listofleaves.append(face)
     return listofleaves
+
 
 
 '''
