@@ -17,7 +17,7 @@ facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
 print('Radius of Gyration = ' + str(radiusg(v, f)))
 graphnet(v, e, 'blue')  # Plots the net
-print('Number of Vertex Connections = ' + str(countvc(name, v, e)))
+print('Number of Vertex Connections = ' + str(countvc(name, v, e, True)))
 print('The leaves are ' + str(leaves(name,number)))
 graphnet(findcenters(v, f), facegraph, 'red')  # plots spanning tree of the net
 # print(facegraph)

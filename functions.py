@@ -113,7 +113,7 @@ elist: array of edges from data
 '''
 
 
-def countvc(nettype, vlist, elist):
+def countvc(nettype, vlist, elist, scatter):
     target = 0
     numbervc = 0
     if nettype == 'Dodecahedron':
@@ -132,7 +132,8 @@ def countvc(nettype, vlist, elist):
             if edge[1] == i:
                 counter += 1
         if counter == target:
-            plt.scatter(vlist[i][0], vlist[i][1], color='black', s=120)
+            if scatter == True:
+                plt.scatter(vlist[i][0], vlist[i][1], color='black', s=120)
             numbervc += 1
     return numbervc
 

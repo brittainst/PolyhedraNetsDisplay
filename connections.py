@@ -28,8 +28,7 @@ vcquantity = [0 for i in range(11)]
 # vcindex is a list/array that logs the numbers of all nets that have i vertex connections in the ith entry
 vcindex = [None for i in range(11)]
 
-for i in range(0, 3000): # iterates through all nets
-    print(i)
+for i in range(0, numofnets): # iterates through all nets
     # generates file name needed to call that net
     # .zfill(k) adds the number of zeros needed in the file name before the file number
     filename = name + 'Net' + str(i).zfill(k) + '.json'
@@ -38,7 +37,7 @@ for i in range(0, 3000): # iterates through all nets
     v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
     e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
     # calculates vertex score of the net we just pulled
-    vertexscore = countvc(name,v,e)
+    vertexscore = countvc(name,v,e, False)
 
     # adds 1 to the tally for how many nets there are with that many vertex connections
     vcquantity[vertexscore] += 1
