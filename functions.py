@@ -4,7 +4,6 @@ from matplotlib import pyplot as plt  # Imports matplotlib so we can plot coordi
 import json  # Allows us to read json files
 
 
-
 def loadfile(filename):
     with open(filename) as json_file:  # Calls a particular .json file
         data = json.load(json_file)  # Stores the contents of the database as a list
@@ -22,7 +21,7 @@ elist: array of edges from data
 '''
 
 
-def graphnet(vlist, elist, clr, showvertices):
+def graphnet(vlist, elist, clr, showvertices, linesty):
     if showvertices == True:
         w, z = vlist.T  # not really sure what this does
         plt.scatter(w, z)  # plots the vertices
@@ -37,7 +36,7 @@ def graphnet(vlist, elist, clr, showvertices):
         # print(point2)
         x_values = [point1[0], point2[0]]
         y_values = [point1[1], point2[1]]
-        plt.plot(x_values, y_values, color=clr, linestyle="-")
+        plt.plot(x_values, y_values, color=clr, linestyle=linesty)
 
 
 '''
@@ -177,10 +176,12 @@ def giveDegDist(name, number):
         degdistribution[int(deg) - 1] = degdistribution[int(deg) - 1] + 1
     return (degdistribution)
 
+
 '''
 degree is a function that takes a vertex and an edge list 
 and returns the degree (number of incident edges) of that vertex
 '''
+
 
 def degree(v, elist):
     deg = 0
@@ -190,6 +191,7 @@ def degree(v, elist):
         if v == int(e[1]):
             deg += 1
     return deg
+
 
 '''
 leaves is a function that returns an array of the numbers of which vertices are leaves
@@ -226,7 +228,6 @@ def leaves(name, number):
     return listofleaves
 
 
-
 '''
 diameter is a function that finds the diameter / longest path across the spanning tree
 '''
@@ -256,9 +257,12 @@ def diameter(name, number):
         longestpathsbyvertex.append(pathtracker)
     return longestpathsbyvertex
 
+
 '''
 function drawnet
 '''
+
+
 # todo: move drawnet to functions
 def drawnet(name, number):
     filename = name + 'Net' + str(number) + '.json'
@@ -271,17 +275,17 @@ def drawnet(name, number):
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
     # print('Radius of Gyration = ' + str(radiusg(v, f)))
-    graphnet(v, e, 'blue', False)  # Plots the net
+    graphnet(v, e, 'blue', False, '-')  # Plots the net
     vertconnect = str(countvc(name, v, e, True))
     print('Number of Vertex Connections = ' + vertconnect)
     # print('The leaves are ' + str(leaves(name,number)))
 
-    #UNCOMMENT THIS LINE TO PLOT SPANNING TREE OF THE NET
-    #graphnet(findcenters(v, f), facegraph, 'red', False)  # plots spanning tree of the net
+    # UNCOMMENT THIS LINE TO PLOT SPANNING TREE OF THE NET
+    # graphnet(findcenters(v, f), facegraph, 'red', False)  # plots spanning tree of the net
     centers = findcenters(v, f)
     for i in range(0, len(centers)):
         plt.text(centers[i][0], centers[i][1], str(i), fontsize=12, horizontalalignment='center',
-             verticalalignment='center')
+                 verticalalignment='center')
 
     # print(facegraph)
     firstface = f[0]
@@ -294,7 +298,7 @@ def drawnet(name, number):
     ycoord = ycoord / len(firstface)
 
     # THESE TWO LINES PRINT NETID ON THE NET
-    #plt.text(xcoord, ycoord, str(number), fontsize=8, horizontalalignment='center',
+    # plt.text(xcoord, ycoord, str(number), fontsize=8, horizontalalignment='center',
     #         verticalalignment='center')
 
     plt.axis('scaled')  # Preserves 1:1 aspect ratio
@@ -310,7 +314,7 @@ def drawnet(name, number):
     plt.xlim([centermass[0] - 7, centermass[0] + 7])
     plt.ylim([centermass[1] - 7, centermass[1] + 7])
     plt.savefig("output" + str(number) + ".jpg", dpi=600)
-    #plt.show()  # Plots the scatterplot
+    # plt.show()  # Plots the scatterplot
 
 
 def neighbors(face, bindlist):
@@ -320,11 +324,28 @@ def neighbors(face, bindlist):
             list_of_neighbors.append(binding[1])
         if binding[1] == face:
             list_of_neighbors.append(binding[0])
-    return(list_of_neighbors)
+    return (list_of_neighbors)
+
+
+'''
+vertex_neighbors is a function that returns the faces that a given vertex is on
+'''
+
+
+def vertex_neighbors(vertex, flist):
+    list_of_neighbors = []
+    for i in range(len(flist)):
+        if vertex in flist[i]:
+            list_of_neighbors.append(i)
+    return list_of_neighbors
+
+
 '''
 draw_schlegel is a function that draws the schlegel diagram of a dodecahedron
 '''
-def draw_schlegel(name,number):
+
+
+def draw_schlegel(name, number):
     data = loadfile("dodecahedron.json")
     x = data.keys()  # Stores as a list the names of all the entries in the dictionary.
     y = data.get("links")
@@ -336,8 +357,6 @@ def draw_schlegel(name,number):
     v = []
     for i in range(20):
         v.append([z[i]["x"], z[i]["y"]])
-
-    graphnet(np.array(v), np.array(e), "blue", True)
 
     internal_faces = [[0, 1, 2, 3, 19],
                       [1, 2, 6, 7, 8],
@@ -357,18 +376,23 @@ def draw_schlegel(name,number):
         for vertex in face:
             xsum += v[vertex][0]
             ysum += v[vertex][1]
-        centers_of_faces.append([xsum/5, ysum/5])
+        centers_of_faces.append([xsum / 5, ysum / 5])
     centers_of_faces.append([4, 4])
 
     filename = name + 'Net' + str(number) + '.json'
 
     data2 = loadfile(filename)
+    f = np.array(data2.get("Faces"))
+    # print(f)
+    durer_vertices = np.array(data2.get("Vertices"))
+    durer_edges = np.array(data2.get("Edges"))
+    durer_gluing = np.array(data2.get("Gluing"))
     g = np.array(data2.get("DihedralAngles"))
     face_bindings = []
     for i in range(30):
         face_bindings.append([g[i]["Face-0"], g[i]["Face-1"]])
 
-    #print(face_bindings)
+    # print(face_bindings)
 
     face_ordering = [0]
     # finds face 1
@@ -384,7 +408,7 @@ def draw_schlegel(name,number):
                     found += 1
                 if found == 1:
                     break
-        if found ==1:
+        if found == 1:
             break
     # finds face 2
     for i in range(12):
@@ -456,18 +480,79 @@ def draw_schlegel(name,number):
             if face_ordering[0] in list_of_neighbors and face_ordering[2] in list_of_neighbors:
                 face_ordering.append(i)
                 break
-    # finds face 3
+    # finds face 12
     for i in range(12):
         if i not in face_ordering:
             face_ordering.append(i)
 
-    #print(face_ordering)
     for i in range(12):
-        plt.text(centers_of_faces[i][0], centers_of_faces[i][1], str(face_ordering[i]), fontsize=12, horizontalalignment='center',
-             verticalalignment='center')
-    #for i in range(20):
+        plt.text(centers_of_faces[i][0], centers_of_faces[i][1], str(face_ordering[i]), fontsize=12,
+                 horizontalalignment='center',
+                 verticalalignment='center')
+
+    cutting_tree = []
+    for i in range(len(durer_edges)):
+        numf = 0
+        first_face = []
+        for face in f:
+            if durer_edges[i][0] in face and durer_edges[i][1] in face:
+                numf += 1
+        if numf == 1:
+            edge_glued_to = 0
+            for glue in durer_gluing:
+                if glue[0] == i:
+                    edge_glued_to = glue[1]
+                elif glue[1] == i:
+                    edge_glued_to = glue[0]
+            face1 = 0
+            face2 = 0
+            for j in range(len(f)):
+                if durer_edges[i][0] in f[j] and durer_edges[i][1] in f[j]:
+                    face1 = j
+            for j in range(len(f)):
+                if durer_edges[edge_glued_to][0] in f[j] and durer_edges[edge_glued_to][1] in f[j]:
+                    face2 = j
+            cutting_tree.append([face1, face2])
+    # print(cutting_tree)
+    new_array = []
+    cutting_tree_edge_list = []
+    for face_pair in cutting_tree:
+        internal_face1 = 0
+        internal_face2 = 0
+        for index in range(len(face_ordering)):
+            if face_ordering[index] == face_pair[0]:
+                internal_face1 = index
+            if face_ordering[index] == face_pair[1]:
+                internal_face2 = index
+        new_array.append([internal_face1, internal_face2])
+
+    internal_faces.append([12, 13, 14, 15, 16])
+    for face_pair in new_array:
+        shared_edge = []
+        for i in internal_faces[face_pair[0]]:
+            if i in internal_faces[face_pair[1]]:
+                shared_edge.append(i)
+        cutting_tree_edge_list.append(shared_edge)
+
+    for face in range(len(internal_faces) - 1):
+        xlist = []
+        ylist = []
+        for vertex in internal_faces[face]:
+            x1 = v[vertex][0]
+            y1 = v[vertex][1]
+            x2 = centers_of_faces[face][0]
+            y2 = centers_of_faces[face][1]
+            x3 = 0.9*x1+0.1*x2
+            y3 = 0.9*y1+0.1*y2
+            xlist.append(x3)
+            ylist.append(y3)
+        plt.fill(xlist, ylist, facecolor="#0288d1")
+
+    #graphnet(np.array(v), np.array(e), "blue", True, "-")
+    #graphnet(np.array(v), cutting_tree_edge_list, "white", False, "-")
+    graphnet(np.array(v), cutting_tree_edge_list, "red", False, "-")
+
+    # for i in range(20):
     #    plt.text(v[i][0], v[i][1], str(i), fontsize=12)
 
     plt.axis('scaled')
-    #f = np.array(data.get("Faces"))
-    #facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
