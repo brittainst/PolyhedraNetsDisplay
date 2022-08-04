@@ -27,3 +27,6 @@ for i in range(2, 11):
 
     plt.savefig("Rg for Vc" + str(i).zfill(2) +".jpg", dpi=600)
     plt.show()
+
+    for i in range(2,len(array)):
+        print(len(array[i]))

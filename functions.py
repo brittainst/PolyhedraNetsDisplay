@@ -313,7 +313,6 @@ def drawnet(name, number):
 
     plt.xlim([centermass[0] - 7, centermass[0] + 7])
     plt.ylim([centermass[1] - 7, centermass[1] + 7])
-    plt.savefig("output" + str(number) + ".jpg", dpi=600)
     # plt.show()  # Plots the scatterplot
 
 
@@ -379,7 +378,7 @@ def draw_schlegel(name, number):
         centers_of_faces.append([xsum / 5, ysum / 5])
     centers_of_faces.append([4, 4])
 
-    filename = name + 'Net' + str(number) + '.json'
+    filename = name + 'Net' + str(number).zfill(5) + '.json'
 
     data2 = loadfile(filename)
     f = np.array(data2.get("Faces"))
@@ -551,7 +550,7 @@ def draw_schlegel(name, number):
     #graphnet(np.array(v), np.array(e), "blue", True, "-")
     #graphnet(np.array(v), cutting_tree_edge_list, "white", False, "-")
     graphnet(np.array(v), cutting_tree_edge_list, "red", False, "-")
-
+    plt.xlabel("Sclegel Diagram" + str(number).zfill(5))
     # for i in range(20):
     #    plt.text(v[i][0], v[i][1], str(i), fontsize=12)
 

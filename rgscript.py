@@ -50,3 +50,5 @@ for i in range(numofnets):
         array2[vc].append(rg)
 print(array)
 print(array2)
+for i in len (array):
+    print("n = " + str(len(array2[i])))
