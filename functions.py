@@ -22,18 +22,15 @@ elist: array of edges from data
 
 
 def graphnet(vlist, elist, clr, showvertices, linesty):
-    if showvertices == True:
+    if showvertices:
         w, z = vlist.T  # not really sure what this does
         plt.scatter(w, z)  # plots the vertices
 
     # For each edge in edge list,
     # Finds the coordinates for each endpoint and plots the line segment
     for x in elist:
-        # print(x)
         point1 = vlist[int(x[0])]
         point2 = vlist[int(x[1])]
-        # print(point1)
-        # print(point2)
         x_values = [point1[0], point2[0]]
         y_values = [point1[1], point2[1]]
         plt.plot(x_values, y_values, color=clr, linestyle=linesty)
@@ -112,29 +109,55 @@ elist: array of edges from data
 '''
 
 
-def countvc(nettype, vlist, elist, scatter):
+def countvc(net_type, vlist, elist, scatter):
     target = 0
     numbervc = 0
-    if nettype == 'Dodecahedron':
+
+    # takes user input to determine the degree needed to be a vertex connection
+    if net_type == 'Tetrahedron':
         target = 4
-    elif nettype == 'Icosahedron':
-        target = 6
-    elif nettype == 'Octahedron':
+    elif net_type == 'Cube':
+        target = 4
+    elif net_type == 'Octahedron':
         target = 5
-    else:
+    elif net_type == 'Dodecahedron':
         target = 4
+    elif net_type == 'Icosahedron':
+        target = 6
+
+    # for each vertex of the graph, determines the degree of that vertex
     for i in range(0, len(vlist)):
-        counter = 0
+        deg = 0
         for edge in elist:
             if edge[0] == i:
-                counter += 1
+                deg += 1
             if edge[1] == i:
-                counter += 1
-        if counter == target:
-            if scatter == True:
+                deg += 1
+        # If the degree matches the target, the number of vertex connections is increased by one
+        if deg == target:
+            # If user sets scatter TRUE, then adds the coordinates of the vertex connections to a scatter plot
+            if scatter:
                 plt.scatter(vlist[i][0], vlist[i][1], color='black', s=60)
             numbervc += 1
-    return numbervc
+    return numbervc  # returns the vertex score for that net
+
+
+'''
+degree is a function that takes a vertex and an edge list 
+and returns the degree (number of incident edges) of that vertex
+'''
+
+
+def degree(vertex, edge_list):
+    deg = 0
+
+    # Calculates the number of incident edges to 'vertex'
+    for edge in edge_list:
+        if vertex == int(edge[0]):
+            deg += 1
+        if vertex == int(edge[1]):
+            deg += 1
+    return deg  # returns the degree of the vertex
 
 
 '''
@@ -174,23 +197,7 @@ def giveDegDist(name, number):
                 deg += 1
         deg = deg / 2
         degdistribution[int(deg) - 1] = degdistribution[int(deg) - 1] + 1
-    return (degdistribution)
-
-
-'''
-degree is a function that takes a vertex and an edge list 
-and returns the degree (number of incident edges) of that vertex
-'''
-
-
-def degree(v, elist):
-    deg = 0
-    for e in elist:
-        if v == int(e[0]):
-            deg += 1
-        if v == int(e[1]):
-            deg += 1
-    return deg
+    return degdistribution
 
 
 '''
@@ -263,7 +270,6 @@ function drawnet
 '''
 
 
-# todo: move drawnet to functions
 def drawnet(name, number):
     filename = name + 'Net' + str(number) + '.json'
 
@@ -323,19 +329,6 @@ def neighbors(face, bindlist):
             list_of_neighbors.append(binding[1])
         if binding[1] == face:
             list_of_neighbors.append(binding[0])
-    return (list_of_neighbors)
-
-
-'''
-vertex_neighbors is a function that returns the faces that a given vertex is on
-'''
-
-
-def vertex_neighbors(vertex, flist):
-    list_of_neighbors = []
-    for i in range(len(flist)):
-        if vertex in flist[i]:
-            list_of_neighbors.append(i)
     return list_of_neighbors
 
 
@@ -345,18 +338,22 @@ draw_schlegel is a function that draws the schlegel diagram of a dodecahedron
 
 
 def draw_schlegel(name, number):
-    data = loadfile("dodecahedron.json")
-    x = data.keys()  # Stores as a list the names of all the entries in the dictionary.
-    y = data.get("links")
-    z = data.get("nodes")
+    data = loadfile("dodecahedron.json")  # loads file that contains the data of the shape of the Schlegel diagram
+    y = data.get("links")  # pulls out the edge information from the file
+    z = data.get("nodes")  # pulls out the vertex coordinates information from the file
+
+    # Takes the edge information and restores it in a more desirable format
     e = []
     for i in range(30):
         e.append([y[i]["source"], y[i]["target"]])
 
+    # Takes the vertex information and restores it in a more desirable format
     v = []
     for i in range(20):
         v.append([z[i]["x"], z[i]["y"]])
 
+    # internal_faces is a 2D array where the ith entry is a list of the vertices that make up that face on the
+    # Schlegel diagram
     internal_faces = [[0, 1, 2, 3, 19],
                       [1, 2, 6, 7, 8],
                       [2, 3, 4, 5, 6],
@@ -368,6 +365,9 @@ def draw_schlegel(name, number):
                       [9, 10, 11, 12, 13],
                       [11, 12, 16, 17, 18],
                       [4, 5, 15, 16, 17]]
+
+    # Calculates the coordinates of the center of each face on the Schlegel diagram
+    # This tells us where to place the number on each face
     centers_of_faces = []
     for face in internal_faces:
         xsum = 0
@@ -376,46 +376,62 @@ def draw_schlegel(name, number):
             xsum += v[vertex][0]
             ysum += v[vertex][1]
         centers_of_faces.append([xsum / 5, ysum / 5])
+    # Since the 11th and final face is indicated by the area outside of the Schlegel diagram
+    # We append a final coordinate that is placed arbitrary outside the diagram
     centers_of_faces.append([4, 4])
 
+    # Based on user input, filename constructs the name of the file to open.
     filename = name + 'Net' + str(number).zfill(5) + '.json'
 
+    # Loads the information for the Dürer net as data2
     data2 = loadfile(filename)
-    f = np.array(data2.get("Faces"))
-    # print(f)
-    durer_vertices = np.array(data2.get("Vertices"))
-    durer_edges = np.array(data2.get("Edges"))
-    durer_gluing = np.array(data2.get("Gluing"))
+
+    f = np.array(data2.get("Faces"))  # Stores face information for the Dürer net
+    durer_edges = np.array(data2.get("Edges"))  # Stores edge information for the Dürer net
+    durer_gluing = np.array(data2.get("Gluing"))  # Store gluing information for the Dürer net
+
+    # Stores information about Dihedral Angles
+    # More importantly, incidentally stores data on which faces will be adjacent to which faces
+    # in the completed Dodecahedron
     g = np.array(data2.get("DihedralAngles"))
+
+    # extracts info on which face will be adjacent to which and stores it as a 2D array called face_bindings
     face_bindings = []
     for i in range(30):
         face_bindings.append([g[i]["Face-0"], g[i]["Face-1"]])
 
-    # print(face_bindings)
-
-    face_ordering = [0]
-    # finds face 1
+    # face_ordering is a renumbering of the faces of the Schlegel diagram so that they match the faces of the Dürer net
+    # The order in which we must find the faces is the order that is inherent from the 2D array internal_faces
+    face_ordering = [0]  # initiates this list with face 0 being 0
+    # chooses the next face to be any face that shares an edge with face 0
     for i in range(12):
-        found = 0
-        if i not in face_ordering:
-            for binding in face_bindings:
+        found = False
+        if i not in face_ordering:  # for each number not already chosen
+            for binding in face_bindings:  # looks through face_bindings for a face that will be adjacent to face 0
                 if binding[0] == 0:
                     face_ordering.append(binding[1])
-                    found += 1
+                    found = True
                 if binding[1] == 0:
                     face_ordering.append(binding[0])
-                    found += 1
-                if found == 1:
+                    found = True
+                if found:
                     break
-        if found == 1:
+                # when a match is found, adds the new face to face_ordering and exits for loops
+        if found:
             break
-    # finds face 2
+    # finds face 2 by searching for a face, not already listed, adjacent to faces 0 and 1
+    # There are two options for face 2, but orientation does not matter, so it selects which ever one it finds first
+    # and then breaks the for loop
     for i in range(12):
         if i not in face_ordering:
-            list_of_neighbors = neighbors(i, face_bindings)
+            list_of_neighbors = neighbors(i, face_bindings)  # finds all neighbors of i
+            # if i is neighbors with both faces 0 and 1, face i is appended and for loops is terminated
             if face_ordering[0] in list_of_neighbors and face_ordering[1] in list_of_neighbors:
                 face_ordering.append(i)
                 break
+    # the next 8 for loops follow similar logic to the previous one, finding the face that is adjacent to the
+    # appropriate 2 proceeding ones, based on inherit ordering of the faces on the Schlegel diagram and appends
+    # it accordingly.
     # finds face 3
     for i in range(12):
         if i not in face_ordering:
@@ -472,32 +488,31 @@ def draw_schlegel(name, number):
             if face_ordering[2] in list_of_neighbors and face_ordering[3] in list_of_neighbors:
                 face_ordering.append(i)
                 break
-    # finds face 11
-    for i in range(12):
-        if i not in face_ordering:
-            list_of_neighbors = neighbors(i, face_bindings)
-            if face_ordering[0] in list_of_neighbors and face_ordering[2] in list_of_neighbors:
-                face_ordering.append(i)
-                break
-    # finds face 12
+    # finds face 11 by appending the only face that hasn't been selected yet
     for i in range(12):
         if i not in face_ordering:
             face_ordering.append(i)
 
+    # numbers the faces on the schlegel diagram by placing the correct number on the center of the ith face
     for i in range(12):
         plt.text(centers_of_faces[i][0], centers_of_faces[i][1], str(face_ordering[i]), fontsize=12,
                  horizontalalignment='center',
                  verticalalignment='center')
 
+    # cutting_tree will store tuples of faces that are cut between in the unfolding of the Dodecahedron
     cutting_tree = []
+
+    # iterates through all edges of the Dürer net
     for i in range(len(durer_edges)):
+        # counts how many faces the edge i lies along
         numf = 0
-        first_face = []
         for face in f:
             if durer_edges[i][0] in face and durer_edges[i][1] in face:
                 numf += 1
+        # we proceed only if the number of faces is 1, as that means it is an edge that will be glued to another
         if numf == 1:
-            edge_glued_to = 0
+            edge_glued_to = 0  # initiates a variable to store which edge the edge i gets glued to
+            # finds the edge that the edge i is glued to and stores it as edge_glued_to
             for glue in durer_gluing:
                 if glue[0] == i:
                     edge_glued_to = glue[1]
@@ -505,16 +520,27 @@ def draw_schlegel(name, number):
                     edge_glued_to = glue[0]
             face1 = 0
             face2 = 0
+            # finds which face our edge i lies on and stores it as face1
             for j in range(len(f)):
                 if durer_edges[i][0] in f[j] and durer_edges[i][1] in f[j]:
                     face1 = j
+            # finds which face our edge_glued_to lies on and stores it as face2
             for j in range(len(f)):
                 if durer_edges[edge_glued_to][0] in f[j] and durer_edges[edge_glued_to][1] in f[j]:
                     face2 = j
+            # adds this pair of edges that are cut between to the array cutting_tree
             cutting_tree.append([face1, face2])
-    # print(cutting_tree)
+
+    # a new array to store a translation of the data in cutting_tree
+    # new_array will be a list of which two faces need to be cut between on the Schlegel diagram
+    # according to the original number of the faces on the Schlegel diagram
     new_array = []
+
+    # cutting_tree_edge_list will track the ACTUAL edges the cutting tree is made up of
     cutting_tree_edge_list = []
+
+    # for each pair of faces in cutting_tree, finds what numbers those faces would be in the original ordering
+    # and stores that pair with the new (original) numbers to new_array
     for face_pair in cutting_tree:
         internal_face1 = 0
         internal_face2 = 0
@@ -525,7 +551,11 @@ def draw_schlegel(name, number):
                 internal_face2 = index
         new_array.append([internal_face1, internal_face2])
 
+    # adds the 12th exterior face that we haven't needed before, but will need for finding the edges of the cutting tree
     internal_faces.append([12, 13, 14, 15, 16])
+
+    # for each pair of faces that will be cut between, finds the edge that they share
+    # and adds it to cutting_tree_edge_list
     for face_pair in new_array:
         shared_edge = []
         for i in internal_faces[face_pair[0]]:
@@ -533,25 +563,39 @@ def draw_schlegel(name, number):
                 shared_edge.append(i)
         cutting_tree_edge_list.append(shared_edge)
 
-    for face in range(len(internal_faces) - 1):
+    # THIS BEGINS VISUAL REPRESENTATION OF THE PREVIOUS CALCUlATIONS
+
+    # for each interior face (does not include the last exterior face)
+    # finds a boundary slightly interior to the faces true boundary and shades it in
+    for face in range(len(internal_faces) - 1):  # iterates for every interior face of the Schlegel diagram
         xlist = []
         ylist = []
-        for vertex in internal_faces[face]:
-            x1 = v[vertex][0]
+        for vertex in internal_faces[face]:  # for each vertex of the currently selected face
+            x1 = v[vertex][0]  # pulls x and y coordinates of that vertex
             y1 = v[vertex][1]
-            x2 = centers_of_faces[face][0]
+            x2 = centers_of_faces[face][0]  # pulls the previously calculated coordinates for the center of that face
             y2 = centers_of_faces[face][1]
-            x3 = 0.9*x1+0.1*x2
-            y3 = 0.9*y1+0.1*y2
+            x3 = 0.9 * x1 + 0.1 * x2  # weights the points 10% of the way to center of that face
+            y3 = 0.9 * y1 + 0.1 * y2  # so that the shading stops just before the edge of the face
             xlist.append(x3)
             ylist.append(y3)
-        plt.fill(xlist, ylist, facecolor="#0288d1")
+        plt.fill(xlist, ylist, facecolor="#0288d1") # plots and shades the given face
 
-    #graphnet(np.array(v), np.array(e), "blue", True, "-")
-    #graphnet(np.array(v), cutting_tree_edge_list, "white", False, "-")
+    # when enabled, plots the vertices and edges of the Schlegel diagram
+    # graphnet(np.array(v), np.array(e), "blue", True, "-")
+
+    # when enabled, plots a white background under the lines for the cutting tree
+    # graphnet(np.array(v), cutting_tree_edge_list, "white", False, "-")
+
+    # plots the cutting tree on the Schlegel diagram
     graphnet(np.array(v), cutting_tree_edge_list, "red", False, "-")
+
+    # Labels the Schlegel Diagram along the x-axis of the plot
     plt.xlabel("Sclegel Diagram" + str(number).zfill(5))
+
+    # when enabled, numbers the vertices on the Schlegel diagram in the original ordering, NOT based on Dürer net
     # for i in range(20):
     #    plt.text(v[i][0], v[i][1], str(i), fontsize=12)
 
+    # scales the axis to preserve geometry
     plt.axis('scaled')
