@@ -599,3 +599,57 @@ def draw_schlegel(name, number):
 
     # scales the axis to preserve geometry
     plt.axis('scaled')
+
+
+'''
+center_of_mass is a function that returns the center of mass of a list of points
+'''
+
+
+def center_of_mass(points):
+    cmx = 0
+    cmy = 0
+    for point in points:
+        cmx += point[0]
+        cmy += point[1]
+    cmx = cmx / len(points)
+    cmy = cmy / len(points)
+    return [cmx,cmy]
+
+
+'''
+dist a function that returns the distance between two points
+'''
+
+
+def dist(point1, point2):
+    x_1 = point1[0]
+    y_1 = point1[1]
+    x_2 = point2[0]
+    y_2 = point2[1]
+    dsquared = math.pow(x_1 - x_2, 2) + math.pow(y_1 - y_2, 2)
+    d = math.sqrt(dsquared)
+    return d
+
+
+'''
+radius_bounding_circle finds the radius of the bounding circle of a net
+'''
+
+
+def radius_bounding_circle(name, number, plot):
+    filename = name + 'Net' + str(number) + '.json'
+    data = loadfile(filename)  # Stores net information as a dictionary
+    v = np.array(data.get("Vertices"))  # Loads vertices of the net
+    f = np.array(data.get("Faces"))  # Loads faces of the net
+    centers = findcenters(v, f)  # stores the centers of each face of the net
+    cent_mass = center_of_mass(centers)  # finds center of mass of the net
+    distances = []  # an array to store how far each vertex of the durer net is from the center of the net
+    for vertex in v:
+        distances.append(dist(vertex, cent_mass))
+    radius = max(distances)
+
+    if plot:
+        (plt.Circle(cent_mass, radius))
+
+    return radius

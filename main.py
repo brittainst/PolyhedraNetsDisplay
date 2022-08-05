@@ -14,10 +14,12 @@ array = [35048, 43253, 43374, 19031, 27884, 22840, 41635, 16750, 10337, 33987, 9
 array2 = [7725, 9023, 11463, 13645, 18975, 22159, 24417, 33681, 35048, 35934, 39346, 40685, 41417, 41971, 42758, 43227,
           43253, 43374]
 
+
 # starts a new matplotlib figure
 plot1 = plt.figure(1)
 # draws the Dürer net from whichever file the user selected
 drawnet(name, number)
+print("Radius of bounding circle is " + str(radius_bounding_circle(name, number, True)))
 # starts a new matplotlib figure
 plot2 = plt.figure(2)
 # draws the corresponding Schlegel diagram
