@@ -20,13 +20,13 @@ array2 = [7725, 9023, 11463, 13645, 18975, 22159, 24417, 33681, 35048, 35934, 39
 plot1 = plt.figure(1)
 drawnet(name, str(number).zfill(5))
 convex_hull(name, str(number).zfill(5), True)
-plt.show()
+
 # radius = radius_bounding_circle(name, number, True)
 # radius2 = bounding_circle_2(name, number, True)
 # print("Radius of bounding circle is " + str(radius) + ", " + str(radius2))
 # starts a new matplotlib figure
-# plot2 = plt.figure(2)
+plot2 = plt.figure(2)
 # draws the corresponding Schlegel diagram
-# draw_schlegel(name, number)
+draw_schlegel(name, number)
 
-
+plt.show()
