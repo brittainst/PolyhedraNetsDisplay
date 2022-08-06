@@ -723,7 +723,7 @@ def generate_angles(points):
         angles[i] = round(angles[i], 2)
     return angles
 
-def convex_hull(name, number):
+def convex_hull(name, number, plot):
     filename = name + 'Net' + str(number) + '.json'
     data = loadfile(filename)  # Stores net information as a dictionary
     x = data.keys()
@@ -768,6 +768,20 @@ def convex_hull(name, number):
         reordered_vertex_coordinates[i] = v[new_vertex_order[i]]
 
     angles = generate_angles(reordered_vertex_coordinates)
+    # We need to check if it has recorded the internal or external angles
+    string = data.get("CmpString")
+    first_char = string[0]
+    marker = False
+    if string[0] == "A":
+        desired_angle = 252.
+    if string[0] == "B":
+        desired_angle = 144.
+    if string[0] == "C":
+        desired_angle = 36.
+    if angles[0] < desired_angle - 1 or angles[0] > desired_angle + 1:
+        marker = True
+        for i in range(len(angles)):
+            angles[i] = 360 - angles[i]
     #print(reordered_vertex_coordinates)
     #print(np.delete(reordered_vertex_coordinates,[0,0],0))
     for j in range(35):
@@ -777,6 +791,9 @@ def convex_hull(name, number):
                 new_vertex_order = np.delete(new_vertex_order, i)
                 break
         angles = generate_angles(reordered_vertex_coordinates)
+        if marker:
+            for i in range(len(angles)):
+                angles[i] = 360 - angles[i]
 
     hull_edges = []
     for i in range(len(new_vertex_order)):
@@ -793,8 +810,8 @@ def convex_hull(name, number):
         s = (a + b + c) / 2
         A = math.sqrt(s * (s-a) * (s-b) * (s-c))
         area += A
-    print("The area of the convex hull is " + str(area))
+    #print("The area of the convex hull is " + str(area))
     # graphnet(v, edges, "red", True, "-")
-    graphnet(v, np.array(hull_edges), "red", False, "-")
-    #for i in range(38):
-    #    plt.text(v[i][0], v[i][1], str(i))
+    if plot:
+        graphnet(v, np.array(hull_edges), "red", False, "-")
+    return area
