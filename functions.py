@@ -684,3 +684,117 @@ def bounding_circle_2(name, number, plot):
         center = [point1[0] / 2 + point2[0] / 2, point1[1] / 2 + point2[1] / 2]
         ax.add_patch(plt.Circle(center, radius, fill=False))
     return radius
+
+
+'''
+angle is a function that finds the angle formed by 3 points
+'''
+
+def angle(p1, p2, p3):
+    x1 = p1[0] - p2[0]
+    y1 = p1[1] - p2[1]
+    x2 = p3[0] - p2[0]
+    y2 = p3[1] - p2[1]
+    theta1 = np.arctan2(y2, x2) * 180 / math.pi
+    theta2 = np.arctan2(y1, x1) * 180 / math.pi
+    if theta1 < 0:
+        theta1 += 360
+    if theta2 < 0:
+        theta2 += 360
+    theta = theta1 - theta2
+    return theta
+
+
+'''
+convex_hull is a function that finds the convex hull of a Dürer net
+'''
+
+
+def generate_angles(points):
+    angles = []
+    for i in range(1, len(points)):
+        measure = angle(points[i - 2], points[i - 1], points[i])
+        angles.append(measure)
+    angles.append(
+        angle(points[-2], points[-1], points[0]))
+    for i in range(len(angles)):
+        if angles[i] < 0:
+            angles[i] += 360
+        angles[i] = round(angles[i], 2)
+    return angles
+
+def convex_hull(name, number):
+    filename = name + 'Net' + str(number) + '.json'
+    data = loadfile(filename)  # Stores net information as a dictionary
+    x = data.keys()
+    v = np.array(data.get("Vertices"))
+    durer_edges = np.array(data.get("Edges"))
+    f = np.array(data.get("Faces"))
+    edges = []
+    for i in range(len(durer_edges)):
+        # counts how many faces the edge i lies along
+        numf = 0
+        for face in f:
+            if durer_edges[i][0] in face and durer_edges[i][1] in face:
+                numf += 1
+        # we proceed only if the number of faces is 1, as that means it is an edge that will be glued to another
+        if numf == 1:
+            edges.append(durer_edges[i])
+
+    new_vertex_order = [0]
+    if name == "Cube":
+        z = 14
+        bound = 280
+    elif name == "Octahedron":
+        z = 10
+        bound = 310
+    elif name == "Dodecahedron":
+        z = 38
+        bound = 262
+    elif name == "Icosahedron":
+        z = 22
+        bound = 310
+    for i in range(1, z):
+        for edge in edges:
+            if new_vertex_order[i-1] == edge[0] and edge[1] not in new_vertex_order:
+                new_vertex_order.append(edge[1])
+                break
+            if new_vertex_order[i-1] == edge[1] and edge[0] not in new_vertex_order:
+                new_vertex_order.append(edge[0])
+                break
+
+    reordered_vertex_coordinates = [[0, 0] for i in range(38)]
+    for i in range(len(new_vertex_order)):
+        reordered_vertex_coordinates[i] = v[new_vertex_order[i]]
+
+    angles = generate_angles(reordered_vertex_coordinates)
+    #print(reordered_vertex_coordinates)
+    #print(np.delete(reordered_vertex_coordinates,[0,0],0))
+    for j in range(35):
+        for i in range(len(angles)):
+            if angles[i] < 180 or angles[i] > bound:
+                reordered_vertex_coordinates = np.delete(reordered_vertex_coordinates, i, 0)
+                new_vertex_order = np.delete(new_vertex_order, i)
+                break
+        angles = generate_angles(reordered_vertex_coordinates)
+
+    hull_edges = []
+    for i in range(len(new_vertex_order)):
+        hull_edges.append([new_vertex_order[i - 1], new_vertex_order[i]])
+
+    # The following uses Heron's formula for finding the area of a triangle
+    area = 0
+    for i in range(len(new_vertex_order)):
+        p1 = reordered_vertex_coordinates[i-1]
+        p2 = reordered_vertex_coordinates[i]
+        a = dist([0, 0], p1)
+        b = dist([0, 0], p2)
+        c = dist(p1, p2)
+        s = (a + b + c) / 2
+        A = math.sqrt(s * (s-a) * (s-b) * (s-c))
+        area += A
+    print("The area of the convex hull is " + str(area))
+    # graphnet(v, edges, "red", True, "-")
+    graphnet(v, np.array(hull_edges), "red", False, "-")
+    #for i in range(38):
+    #    plt.text(v[i][0], v[i][1], str(i))

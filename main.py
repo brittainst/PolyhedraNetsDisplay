@@ -19,6 +19,7 @@ array2 = [7725, 9023, 11463, 13645, 18975, 22159, 24417, 33681, 35048, 35934, 39
 plot1 = plt.figure(1)
 # draws the Dürer net from whichever file the user selected
 drawnet(name, number)
+convex_hull(name, number)
 # radius = radius_bounding_circle(name, number, True)
 # radius2 = bounding_circle_2(name, number, True)
 # print("Radius of bounding circle is " + str(radius) + ", " + str(radius2))
