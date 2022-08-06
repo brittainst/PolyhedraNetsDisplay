@@ -650,6 +650,37 @@ def radius_bounding_circle(name, number, plot):
     radius = max(distances)
 
     if plot:
-        (plt.Circle(cent_mass, radius))
+        fig = plt.gcf()
+        ax = fig.gca()
+        ax.add_patch(plt.Circle(cent_mass, radius, fill=False))
 
+    return radius
+
+
+'''
+bounding_circle_2 stricter bounding circle
+'''
+
+
+def bounding_circle_2(name, number, plot):
+    filename = name + 'Net' + str(number) + '.json'
+    data = loadfile(filename)  # Stores net information as a dictionary
+    v = np.array(data.get("Vertices"))  # Loads vertices of the net
+    dm = 0
+    point1 = []
+    point2 = []
+    for vertex in v:
+        for vertex2 in v:
+            temp = dist(vertex, vertex2)
+            if temp > dm:
+                point1 = vertex
+                point2 = vertex2
+                dm = temp
+    radius = dm / 2
+
+    if plot:
+        fig = plt.gcf()
+        ax = fig.gca()
+        center = [point1[0] / 2 + point2[0] / 2, point1[1] / 2 + point2[1] / 2]
+        ax.add_patch(plt.Circle(center, radius, fill=False))
     return radius
