@@ -15,7 +15,8 @@ for number in range(43380):
     rg = radiusg(v, f)
     ch_list.append(hull_area)
     rg_list.append(rg)
-
+print("Convex Hull List")
+print(ch_list)
 # print(unique_ch_values)
 # print(len(unique_ch_values))
 plt.scatter(ch_list, rg_list, s=20, alpha=0.1, edgecolors="k")
