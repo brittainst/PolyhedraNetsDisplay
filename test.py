@@ -18556,19 +18556,41 @@ for i in range(2, 11):
     y2_list = []
     for j in array[i - 2]:  # Calls the row of net numbers for the number of vertex connections 
         # we are currently looking at
+        # for each of the three entries in the given row
+
+        # append area of the convex hull to the x2_list
         x2_list.append(convex_hull("Dodecahedron", str(j).zfill(5), False))
+
+        # Calculates the radius of gyration and appends it to the y2_list
         filename = "Dodecahedron" + 'Net' + str(j).zfill(5) + '.json'
         data = loadfile(filename)
         v = np.array(data.get("Vertices"))
         f = np.array(data.get("Faces"))
         y2_list.append(radiusg(v, f))
+
+    # Adds the coordinates of the nets we sampled to the full scatter plot of that space in a different color
+    # and larger size so they stand out more.
     plt.scatter(x2_list, y2_list, alpha=1, edgecolors="red")
+
+    # Labels the x-axis, y-axis, and the title of the diagram
     plt.xlabel("Area of Convex Hull" + "R^2 = " + str(round(r_squared, 3)))
     plt.ylabel("Radius of Gyration")
     plt.title("Radius of Gyration versus Area of Convex Hull for Vc = " + str(i))
+
+    # Finds slope and y-intercept of the line of best fit
     b, a = np.polyfit(x_list, y_list, deg=1)
+
+    # Creates an evenly spaced list of x values
     xseq = np.linspace(25, 45, num=200)
+
+    # Plots the line of best fit
     plt.plot(xseq, a + b * xseq, color="k", lw=2.5)
+
+    # Prints the value of R^2
     print("R^2 is " + str(r_squared))
+
+    # Saves the figure as a file
     plt.savefig("rg_versus_ch graph Vc= " + str(i), dpi=900)
+
+    # Makes the plot visible
     plt.show()

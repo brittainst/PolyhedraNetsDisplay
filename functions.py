@@ -17,7 +17,9 @@ and outputs a plot of the net
 :args
 vlist: array of vertices from data
 elist: array of edges from data
-
+clr: The color to plot the data as
+showvertices: Boolean to determine whether to plot the vertices and the edges, or just show the edges
+linesty: Allows the user to enter a string to dictate the linestyle, i.e. solid edges, dashed edges, etcetera
 '''
 
 
@@ -61,7 +63,6 @@ def findcenters(vlist, flist):
         # Divides by the number of faces to find the coordinates of the center of the face
         centerOfFace[0] = centerOfFace[0] / len(face)
         centerOfFace[1] = centerOfFace[1] / len(face)
-        # plt.plot(centerOfFace[0],centerOfFace[1],'bo', linestyle="-")
         FaceCenters[i] = centerOfFace  # Stores the coordinates in the array of face centers
     return (FaceCenters)
 
@@ -94,6 +95,7 @@ def radiusg(vlist, flist):
         ybar = centermass[1]
         rgsquared = rgsquared + pow(x - xbar, 2) + pow(y - ybar, 2)
 
+    # Takes the square root to find the actual value of the radius of gyration
     rg = math.sqrt(rgsquared)
     return rg
 
@@ -105,6 +107,7 @@ countvc is a function that counts vertex connections
 nettype: type of net
 vlist: array of vertices from data
 elist: array of edges from data
+scatter: scatter is a boolean that indicates whether or not to try and plot the vertex connections on the graph
 
 '''
 
@@ -172,9 +175,11 @@ number: number of net
 def giveDegDist(name, number):
     filename = name + 'Net' + str(number) + '.json'
     data = loadfile(filename)
+
+    # facegraph stores the data of which face is adjacent to which
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
-    facequantity = 0
+    # gives the number of faces the Dürer net has based on what type of net it is
     if name == 'Tetrahedron':
         facequantity = 4
     elif name == 'Cube':
@@ -186,8 +191,11 @@ def giveDegDist(name, number):
     else:
         facequantity = 20
 
+    # initializes an array to track how many vertices of each degree there are on the spanning tree
+    # The ith entry stores the number of vertices of degree i + 1
     degdistribution = [0, 0, 0, 0, 0]
 
+    # Calculates the degree of each face in the net and adds 1 to the appropriate entry in degdistribution
     for face in range(0, facequantity):
         deg = 0
         for edge in facegraph:
@@ -206,6 +214,7 @@ leaves is a function that returns an array of the numbers of which vertices are 
 
 
 def leaves(name, number):
+    # I don't think we really used this function for anything so it doesn't really need to be cleaned up now
     filename = name + 'Net' + str(number) + '.json'
     data = loadfile(filename)
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
@@ -266,60 +275,78 @@ def diameter(name, number):
 
 
 '''
-function drawnet
+drawnet is a function that graphs visual representations of Dürer net. It does slightly more than graphnet.
+graphnet just plots a graph given an vertex list and an edge list.
+drawnet encorporates other functions to add more data to the graph, like drawing the spanning tree, 
+convex hull, or numbering the faces
 '''
 
 
 def drawnet(name, number):
+    # calls the appropriate file from the database and stores it as the dictionary data
     filename = name + 'Net' + str(number) + '.json'
-
     data = loadfile(filename)
-    v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
-    e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
-    x = data.keys()  # Stores as a list the names of all the entries in the dictionary.
+
+    # Pulls out information from data and stores it as separate arrays.
+    # v holds vertex information, e holds edge information, f holds face information,
+    # and facegraph holds information about which face is next to which face in the Dürer net
+    v = np.array(data.get("Vertices"))
+    e = np.array(data.get("Edges"))
+    x = data.keys()
     f = np.array(data.get("Faces"))
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
+    # when enabled prints the radius of gyration of the Dürer net
     # print('Radius of Gyration = ' + str(radiusg(v, f)))
-    graphnet(v, e, 'blue', False, '-')  # Plots the net
+
+    # plots the Dürer net in blue, only plots the edges, and uses a solid '-' line
+    graphnet(v, e, 'blue', False, '-')
+
+    # stores the number of vertex connections as vertconnect
+    # The boolean set to True also tells it to add those vertex connections to the plot
     vertconnect = str(countvc(name, v, e, True))
+
+    # prints the number of vertex connections
     print('Number of Vertex Connections = ' + vertconnect)
+
+    # When enabled prints what the leaves are maybe? I don't know what enumeration it does this by though
     # print('The leaves are ' + str(leaves(name,number)))
 
     # UNCOMMENT THIS LINE TO PLOT SPANNING TREE OF THE NET
     # graphnet(findcenters(v, f), facegraph, 'red', False)  # plots spanning tree of the net
-    centers = findcenters(v, f)
-    for i in range(0, len(centers)):
+
+    # numbers the faces of the graph
+    centers = findcenters(v, f)  # finds the center of each face
+    for i in range(0, len(centers)):  # for each face, plots the number of the face on the faces center
         plt.text(centers[i][0], centers[i][1], str(i), fontsize=12, horizontalalignment='center',
                  verticalalignment='center')
 
-    # print(facegraph)
-    firstface = f[0]
-    xcoord = 0
-    ycoord = 0
-    for i in firstface:
-        xcoord = xcoord + v[int(firstface[i])][0]
-        ycoord = ycoord + v[int(firstface[i])][1]
-    xcoord = xcoord / len(firstface)
-    ycoord = ycoord / len(firstface)
-
-    # THESE TWO LINES PRINT NETID ON THE NET
-    # plt.text(xcoord, ycoord, str(number), fontsize=8, horizontalalignment='center',
-    #         verticalalignment='center')
+    # when enabled these three lines print the number of the net on the center of the 0th face
+    # xcoord = centers[0][0]
+    # ycoord = centers[0][1]
+    # plt.text(xcoord, ycoord, str(number), fontsize=8, horizontalalignment='center', verticalalignment='center')
 
     plt.axis('scaled')  # Preserves 1:1 aspect ratio
-    plt.xlabel(name + ' Net ' + str(number) + ': V_c = ' + str(vertconnect))
+    plt.xlabel(name + ' Net ' + str(number) + ': V_c = ' + str(vertconnect))  # labels x axis
 
-    FaceCenters = findcenters(v, f)
+    # the next few lines finds the center of mass of the Dürer net
     centermass = [0, 0]  # Initializes a variable for center of mass
-    for center in FaceCenters:  # Averages the centers of the faces to find center of mass
+    for center in centers:  # Averages the centers of the faces to find center of mass
         centermass = np.add(centermass, center)
-    centermass[0] = centermass[0] / len(FaceCenters)
-    centermass[1] = centermass[1] / len(FaceCenters)
+    centermass[0] = centermass[0] / len(centers)
+    centermass[1] = centermass[1] / len(centers)
 
+    # sets the scale of the plot based on the center of mass of the center of mass of the net.
     plt.xlim([centermass[0] - 7, centermass[0] + 7])
     plt.ylim([centermass[1] - 7, centermass[1] + 7])
-    # plt.show()  # Plots the scatterplot
+
+
+'''
+neighbors takes a list of faces and a list of which faces are bound to which other faces and returns
+the list_of_neighbors. That is the list of neighboring faces of the original face
+NOTE TO SELF: This should apply to any graph with vertices and edges. If passed a vertex list and an edge list,
+effectively this would return the neighboring vertices of the original vertex.
+'''
 
 
 def neighbors(face, bindlist):
@@ -614,7 +641,7 @@ def center_of_mass(points):
         cmy += point[1]
     cmx = cmx / len(points)
     cmy = cmy / len(points)
-    return [cmx,cmy]
+    return [cmx, cmy]
 
 
 '''
