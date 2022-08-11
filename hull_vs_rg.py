@@ -24,7 +24,7 @@ for number in range(43380):
     # Calculates hull_area by calling the function convex_hull which returns the area of the convex hull
     # The last boolean input tells the function whether or not to attempt to plot the convex hull on a diagram,
     # so it's therefore set to FALSE so that it just returns the area and doesn't try to plot anything.
-    hull_area = convex_hull(name, str(number).zfill(5), False)
+    hull_area = convex_hull(name, str(number).zfill(5), False)[0]
 
     # Calculates the radius of gyration by calling the radiusg function
     rg = radiusg(v, f)

@@ -28,27 +28,40 @@ else:
     k = 5
     maxvc = 8
 
+# creates an empty array to store [number of vertex connections, radius of gyration] for each net
 array = [[0, 0] for i in range(numofnets)]
+
+# for each Dürer net
 for i in range(0, numofnets):
+    # Loads appropriate file as a dictionary
     filename = name + 'Net' + str(i).zfill(k) + '.json'
     data = loadfile(filename)
-    v = np.array(data.get("Vertices"))
-    e = np.array(data.get("Edges"))
-    f = np.array(data.get("Faces"))
-    rg = radiusg(v, f)
-    vc = countvc(name, v, e, False)
-    array[i] = [vc, rg]
 
+    v = np.array(data.get("Vertices"))  # stores vertices
+    e = np.array(data.get("Edges"))  # stores edges
+    f = np.array(data.get("Faces"))  # stores faces
+    rg = radiusg(v, f)  # tabulates radius of gyration
+    vc = countvc(name, v, e, False)  # tabulates number of vertex connections
+    array[i] = [vc, rg]  # adds [number of vertex connections, radius of gyration to the corresponding entry in array
+
+# array2 is going to store the radius of gyration data, but each row is only radius of gyration data for that number
+# of vertex connections
 array2 = [None for i in range(0, maxvc + 1)]
+
+# for each net
 for i in range(numofnets):
     pair = array[i]
-    vc = pair[0]
-    rg = pair[1]
-    if array2[vc] == None:
+    vc = pair[0]  # pulls out vertex connections for that net
+    rg = pair[1]  # pulls out radius of gyration for that net
+    if array2[vc] == None:  # If the row for that number of Vc is empty, the radius of gyration starts that row
         array2[vc] = [rg]
-    else:
+    else:  # If the row for that number of Vc is not empty, the radius of gyration is appended to that row
         array2[vc].append(rg)
+
+# prints both arrays
 print(array)
 print(array2)
-for i in len (array):
+
+# prints the len of each
+for i in len(array):
     print("n = " + str(len(array2[i])))

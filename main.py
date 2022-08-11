@@ -19,8 +19,9 @@ array2 = [7725, 9023, 11463, 13645, 18975, 22159, 24417, 33681, 35048, 35934, 39
 
 plot1 = plt.figure(1)
 drawnet(name, str(number).zfill(5))
-convex_hull(name, str(number).zfill(5), True)
-
+[area, perimeter] = convex_hull(name, str(number).zfill(5), True)
+print(area)
+print(perimeter)
 # When uncommented, draws a bounding circle that is slightly too big
 # radius = radius_bounding_circle(name, number, True)
 

@@ -634,14 +634,16 @@ center_of_mass is a function that returns the center of mass of a list of points
 
 
 def center_of_mass(points):
+
+    # sets initial values for the x and y coordinates of the center of mass
     cmx = 0
     cmy = 0
-    for point in points:
+    for point in points:  # for each point in the list of points, tallies up the sum of coordinates
         cmx += point[0]
         cmy += point[1]
-    cmx = cmx / len(points)
+    cmx = cmx / len(points)  # Divides sum of coordinates to find the actual center of mass
     cmy = cmy / len(points)
-    return [cmx, cmy]
+    return [cmx, cmy]  # Returns the center of mass
 
 
 '''
@@ -649,14 +651,14 @@ dist a function that returns the distance between two points
 '''
 
 
-def dist(point1, point2):
-    x_1 = point1[0]
-    y_1 = point1[1]
-    x_2 = point2[0]
-    y_2 = point2[1]
-    dsquared = math.pow(x_1 - x_2, 2) + math.pow(y_1 - y_2, 2)
-    d = math.sqrt(dsquared)
-    return d
+def dist(point1, point2): # Finds the distance between two points
+    x_1 = point1[0]  # stores x coordinate of first point
+    y_1 = point1[1]  # stores y coordinate of first point
+    x_2 = point2[0]  # stores x coordinate of second point
+    y_2 = point2[1]  # stores y coordinate of second point
+    dsquared = math.pow(x_1 - x_2, 2) + math.pow(y_1 - y_2, 2)  # distance formula for d^2
+    d = math.sqrt(dsquared)  # takes square root to find distance
+    return d  # returns distance
 
 
 '''
@@ -718,18 +720,52 @@ angle is a function that finds the angle formed by 3 points
 '''
 
 def angle(p1, p2, p3):
-    x1 = p1[0] - p2[0]
-    y1 = p1[1] - p2[1]
-    x2 = p3[0] - p2[0]
-    y2 = p3[1] - p2[1]
+    # First thing is to center p2 at the origin and then recalculate the coordinates of p1
+    x1 = p1[0] - p2[0]  # x coordinate of first point with p2 centered at origin
+    y1 = p1[1] - p2[1]  # y coordinate of first point with p2 centered at origin
+    x2 = p3[0] - p2[0]  # x coordinate of second point with ...
+    y2 = p3[1] - p2[1]  # y coordinate of second point ...
+
+    # Uses arctan function to calculate angle of inclination of line from origin to point 2
     theta1 = np.arctan2(y2, x2) * 180 / math.pi
+    # Uses arctan function to calculate angle of inclination of line from origin to point 1
     theta2 = np.arctan2(y1, x1) * 180 / math.pi
+
+    # If the output is negative, does 360 - output to get the positive version of the angle
     if theta1 < 0:
         theta1 += 360
     if theta2 < 0:
         theta2 += 360
-    theta = theta1 - theta2
-    return theta
+
+    theta = theta1 - theta2  # subtracts two angles to get the angle inbetween the lines
+    return theta  # returns the angle
+
+
+'''
+generate_angles is a function that takes a list of coordinates and finds the exterior angles of each
+set of three points using the angle function.
+'''
+
+
+def generate_angles(points):
+
+    # Starts with an empty array for angles
+    angles = []
+
+    # for each point in the list of points, we take the vertex on either side and calculate the angle between the 3 pnts
+    for i in range(1, len(points)):
+        measure = angle(points[i - 2], points[i - 1], points[i]) # finds angle
+        angles.append(measure)  # appends to list of angles
+    angles.append(angle(points[-2], points[-1], points[0]))  # appends angle for last set of coordinates in list points
+
+    # Checks that the angles are positive, and if negative does 360 - output to make them positive
+    # This might be redundant but I'm not sure
+    for i in range(len(angles)):
+        if angles[i] < 0:
+            angles[i] += 360
+        # Rounds angles to 2 degrees to try to get rid of variation in calculations caused by rounding
+        angles[i] = round(angles[i], 2)
+    return angles  # returns list of angles
 
 
 '''
@@ -737,38 +773,34 @@ convex_hull is a function that finds the convex hull of a Dürer net
 '''
 
 
-def generate_angles(points):
-    angles = []
-    for i in range(1, len(points)):
-        measure = angle(points[i - 2], points[i - 1], points[i])
-        angles.append(measure)
-    angles.append(
-        angle(points[-2], points[-1], points[0]))
-    for i in range(len(angles)):
-        if angles[i] < 0:
-            angles[i] += 360
-        angles[i] = round(angles[i], 2)
-    return angles
-
 def convex_hull(name, number, plot):
     filename = name + 'Net' + str(number) + '.json'
     data = loadfile(filename)  # Stores net information as a dictionary
-    x = data.keys()
-    v = np.array(data.get("Vertices"))
-    durer_edges = np.array(data.get("Edges"))
-    f = np.array(data.get("Faces"))
+    v = np.array(data.get("Vertices"))  # stores vertices of Dürer net
+    durer_edges = np.array(data.get("Edges"))  # stores edges of Dürer net
+    f = np.array(data.get("Faces"))  # stores faces of Dürer net
+
+    # edges is a new array to hold the edges that make up the outer boundary of the Dürer net
     edges = []
-    for i in range(len(durer_edges)):
-        # counts how many faces the edge i lies along
+
+    # for each edge of the Dürer net, take the ones that are only adjacent to one face (i.e. the ones on the
+    # outside of the net that make up the boundary) and append them to the list edges
+    for i in range(len(durer_edges)):  # for each edge of the Dürer net
         numf = 0
-        for face in f:
+        for face in f:  # for each face of the net
+            # If both the vertices of the edge are part of that face
             if durer_edges[i][0] in face and durer_edges[i][1] in face:
+                # increase the number of faces it lies on by 1
                 numf += 1
         # we proceed only if the number of faces is 1, as that means it is an edge that will be glued to another
         if numf == 1:
-            edges.append(durer_edges[i])
+            edges.append(durer_edges[i])  # append the edge to the list of edges that make up the boundary.
 
+    # new_vertex_order will store the order of the vertices as we go around the outside of the Dürer net
     new_vertex_order = [0]
+
+    # Determines z: the number of edges on that type of Dürer net
+    # and determines bound: the maximum angle we wish to allow for that type of Dürer net
     if name == "Cube":
         z = 14
         bound = 280
@@ -781,6 +813,12 @@ def convex_hull(name, number, plot):
     elif name == "Icosahedron":
         z = 22
         bound = 310
+
+    # THIS FOR LOOP IS WHAT WAS CAUSING THE ISSUE OF MEASURING INTERIOR ANGLES INSTEAD OF EXTERIOR ANGLES
+    # Since I course corrected this mistake elsewhere in the code, this doesn't need to be changed for now
+    # This for loop builds the new vertex order by taking the last vertex and finding the edge along the boundary
+    # that includes it, and another vertex that is not already in the new vertex order. Then it appends that
+    # new vertex to the vertex order.
     for i in range(1, z):
         for edge in edges:
             if new_vertex_order[i-1] == edge[0] and edge[1] not in new_vertex_order:
@@ -790,39 +828,61 @@ def convex_hull(name, number, plot):
                 new_vertex_order.append(edge[0])
                 break
 
+    # Creates a new list of vertex connections in the order that they occur going around the outside of the Dürer net
     reordered_vertex_coordinates = [[0, 0] for i in range(38)]
     for i in range(len(new_vertex_order)):
         reordered_vertex_coordinates[i] = v[new_vertex_order[i]]
 
+    # Uses the new order of the vertex connections to calculate the exterior angles of the polygon they define
     angles = generate_angles(reordered_vertex_coordinates)
     # We need to check if it has recorded the internal or external angles
+    # We do this using the compare string
     string = data.get("CmpString")
-    first_char = string[0]
     marker = False
+
+    # The first entry in the compare string tells us what the first angle in our list angles should be
     if string[0] == "A":
         desired_angle = 252.
     if string[0] == "B":
         desired_angle = 144.
     if string[0] == "C":
         desired_angle = 36.
+
+    # If the first angle is not within a reasonable bound of what we determine it should be.
+    # We set marker = True, which tells our code later to flip the angles from interior angles to exterior angles
     if angles[0] < desired_angle - 1 or angles[0] > desired_angle + 1:
         marker = True
+        # We also flip the angles from the first calculation to start
         for i in range(len(angles)):
             angles[i] = 360 - angles[i]
-    #print(reordered_vertex_coordinates)
-    #print(np.delete(reordered_vertex_coordinates,[0,0],0))
+
+    # This for loop is set to go an arbitrary amount of times that is more than enough to finish the process
     for j in range(35):
         for i in range(len(angles)):
+            # Each time through we search for an exterior angle that is less than 180 degrees
             if angles[i] < 180 or angles[i] > bound:
+                # If we find one we delete it from both the coordinates list and the vertex order list
+                # and we break the for loop
                 reordered_vertex_coordinates = np.delete(reordered_vertex_coordinates, i, 0)
                 new_vertex_order = np.delete(new_vertex_order, i)
                 break
+        # We then recalculate the angles of the new polygon formed with this vertex removed.
         angles = generate_angles(reordered_vertex_coordinates)
+
+        # If we found that we were measuring interior angles instead of exterior angles before, we flip them
+        # to be exterior angles every time we recalculate the angles.
         if marker:
             for i in range(len(angles)):
                 angles[i] = 360 - angles[i]
 
+    # We now want to find the edges that make up the convex hull
+    # HULL_EDGES AND THE FOLLOWING FOR LOOP ARE NOT NEEDED FOR CALCULATING AREA
+    # THEY ARE ONLY NEEDED FOR CALLING GRAPHNET TO ADD THE CONVEX HULL TO THE PLOT
     hull_edges = []
+
+    # once the process of deleting vertices is finished
+    # For each pair of vertices that are next to each other in the list
+    # we add an edge consisting of those 2 vertices to hull_edges
     for i in range(len(new_vertex_order)):
         hull_edges.append([new_vertex_order[i - 1], new_vertex_order[i]])
 
@@ -837,8 +897,32 @@ def convex_hull(name, number, plot):
         s = (a + b + c) / 2
         A = math.sqrt(s * (s-a) * (s-b) * (s-c))
         area += A
-    #print("The area of the convex hull is " + str(area))
-    # graphnet(v, edges, "red", True, "-")
+
+    # We calculate the perimeter by just adding the distance between each pair of adjacent vertices
+    # using the dist() function defined earlier
+    perimeter = 0
+    for i in range(len(reordered_vertex_coordinates)):
+        perimeter += dist(reordered_vertex_coordinates[i-1], reordered_vertex_coordinates[i])
+
+    # If variable plot is True, plots the convex hull
     if plot:
         graphnet(v, np.array(hull_edges), "red", False, "-")
-    return area
+
+    # Returns [area of the convex hull, perimeter of the convex hull
+    return [area, perimeter]
+
+
+'''
+generate_perimeter_list generates the length of the perimeter of the convex hull for every Dodecahedron Dürer net
+and returns those values as a list/array
+'''
+
+
+def generate_perimeter_list():
+    perimeter_list = []
+    for i in range(0, 43380):
+        # convex_hull returns [ area of convex hull, perimeter of convex hull ]
+        # So the [1] at the end of the line is pulling out the perimeter, and then we are appending it to the list
+        perimeter_list.append(convex_hull("Dodecahedron", str(i).zfill(5), False)[1])
+
+    return perimeter_list
