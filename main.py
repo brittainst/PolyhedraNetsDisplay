@@ -21,9 +21,13 @@ plot1 = plt.figure(1)
 drawnet(name, str(number).zfill(5))
 convex_hull(name, str(number).zfill(5), True)
 
+# When uncommented, draws a bounding circle that is slightly too big
 # radius = radius_bounding_circle(name, number, True)
+
+# When uncommented, draws a bounding circle that is slightly too small
 # radius2 = bounding_circle_2(name, number, True)
 # print("Radius of bounding circle is " + str(radius) + ", " + str(radius2))
+
 # starts a new matplotlib figure
 plot2 = plt.figure(2)
 # draws the corresponding Schlegel diagram
