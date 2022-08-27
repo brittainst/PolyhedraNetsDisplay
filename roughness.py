@@ -1,4 +1,7 @@
 import json  # Allows us to read json files
+# This file is just a product of something I was working on with Dr. Jungck.
+# It just scans through the roughness of each net, to find the minimum and maximum roughness
+# Also pulls out all possible values of roughness
 from functions import *
 
 name = "Icosahedron"
@@ -15,7 +18,6 @@ for i in range(43380):
         maxrough = roughness
     if roughness < minrough:
         minrough = roughness
-    # print("net " + str(i) + " is " + str(roughness))
     if roughness not in possible_values:
         possible_values.append(roughness)
 print("maximum roughness = " + str(maxrough))

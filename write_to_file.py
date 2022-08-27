@@ -1,3 +1,5 @@
+# This was me experimenting (and failing) with trying to write data to a csv file.
+
 import csv
 
 header = ['name', 'area', 'country_code2', 'country_code3']
