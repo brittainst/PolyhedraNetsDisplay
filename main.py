@@ -1,7 +1,7 @@
 # when program runs, it will prompt user to enter type of polyhedra net to open, and the
 # number of that net (according to the database) to open. it will then draw the net
 #TODO: time permitting, go through git history and pull back every variation we've done in main
-# (just nets, convex hull, numbering faces, etc)
+# (just nets, convex hull, numbering faces, etc) to show how we've used our functions
 
 from functions import *
 
