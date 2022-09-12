@@ -35,9 +35,8 @@ array = [[0, 0] for i in range(numofnets)]
 # for each Dürer net
 for i in range(0, numofnets):
     # Loads appropriate file as a dictionary
-    #TODO: fix this whole loadfile mess across every function
-    filename = name + 'Net' + str(i).zfill(k) + '.json'
-    data = loadfile(filename)
+    #TODO: fix this whole loadfile mess across every function (check to make sure zfill works)
+    data = loadfile(name, str(i).zfill(k))
 
     v = np.array(data.get("Vertices"))  # stores vertices
     e = np.array(data.get("Edges"))  # stores edges

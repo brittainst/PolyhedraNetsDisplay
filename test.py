@@ -18568,8 +18568,7 @@ for i in range(2, 11):
         x2_list.append(convex_hull("Dodecahedron", str(j).zfill(5), False))
 
         # Calculates the radius of gyration and appends it to the y2_list
-        filename = "Dodecahedron" + 'Net' + str(j).zfill(5) + '.json'
-        data = loadfile(filename)
+        data = loadfile(name, str(j).zfill(5))
         v = np.array(data.get("Vertices"))
         f = np.array(data.get("Faces"))
         y2_list.append(radiusg(v, f))

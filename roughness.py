@@ -11,8 +11,7 @@ possible_values = []
 for i in range(43380):
     # calls the appropriate file from the database and stores it as the dictionary data
     #TODO: loadfile thing
-    filename = name + 'Net' + str(i).zfill(5) + '.json'
-    data = loadfile(filename)
+    data = loadfile(name, str(i).zfill(5))
     roughness = data["NetInfo"].get("Roughness")
     if roughness > maxrough:
         maxrough = roughness

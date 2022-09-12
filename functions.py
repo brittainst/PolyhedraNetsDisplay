@@ -4,7 +4,8 @@ from matplotlib import pyplot as plt  # Imports matplotlib so we can plot coordi
 import json  # Allows us to read json files
 
 
-def loadfile(filename):
+def loadfile(name, number):
+    filename = name + 'Net' + str(number) + '.json'
     with open(filename) as json_file:  # Calls a particular .json file
         data = json.load(json_file)  # Stores the contents of the database as a list
     return data
@@ -22,8 +23,8 @@ showvertices: Boolean to determine whether to plot the vertices and the edges, o
 linesty: Allows the user to enter a string to dictate the linestyle, i.e. solid edges, dashed edges, etcetera
 '''
 
-# TODO: find out whether graphnet is used in older code and if not, just keep drawnet (add graphnet code into draw function, get rid of graphnet function)
-# TODO: (see line 278)
+# TODO: find out whether graphnet is used in older code and if not, just keep drawnet (add graphnet code into draw  function, get rid of graphnet function)
+#  TODO: (see line 278)
 def graphnet(vlist, elist, clr, showvertices, linesty):
     if showvertices:
         w, z = vlist.T  # not really sure what this does
@@ -176,10 +177,10 @@ number: number of net
 
 
 def giveDegDist(name, number):
-    filename = name + 'Net' + str(number) + '.json'
-    data = loadfile(filename)
+    data = loadfile(name, number)
 
     # facegraph stores the data of which face is adjacent to which
+    #TODO: find duplicates
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
     # gives the number of faces the Dürer net has based on what type of net it is
@@ -193,7 +194,7 @@ def giveDegDist(name, number):
         facequantity = 12
     else:
         facequantity = 20
-        #TODO: something above is funky (switch, add exception)
+        #TODO: something above is funky (switch, add exception) (end of duplicates)
 
     # initializes an array to track how many vertices of each degree there are on the spanning tree
     # The ith entry stores the number of vertices of degree i + 1
@@ -219,8 +220,7 @@ leaves is a function that returns an array of the numbers of which vertices are 
 
 def leaves(name, number):
     # I don't think we really used this function for anything so it doesn't really need to be cleaned up now
-    filename = name + 'Net' + str(number) + '.json'
-    data = loadfile(filename)
+    data = loadfile(name, number)
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
     if name == 'Tetrahedron':
         facequantity = 4
@@ -256,8 +256,7 @@ diameter is a function that finds the diameter / longest path across the spannin
 # TODO: This function not finished yet. I need to go back and write sudo code before finishing
 # TODO: Write a function that calculates facequantity based on the type of net
 def diameter(name, number):
-    filename = name + 'Net' + str(number) + '.json'
-    data = loadfile(filename)
+    data = loadfile(name, number)
     facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
     # pulls a list of all the numbers of the leaves in the net
     listofleaves = leaves(name, number)
@@ -289,8 +288,7 @@ convex hull, or numbering the faces
 
 def drawnet(name, number):
     # calls the appropriate file from the database and stores it as the dictionary data
-    filename = name + 'Net' + str(number) + '.json'
-    data = loadfile(filename)
+    data = loadfile(name, number)
 
     # Pulls out information from data and stores it as separate arrays.
     # v holds vertex information, e holds edge information, f holds face information,
@@ -412,11 +410,9 @@ def draw_schlegel(name, number):
     # We append a final coordinate that is placed arbitrary outside the diagram
     centers_of_faces.append([4, 4])
 
-    # Based on user input, filename constructs the name of the file to open.
-    filename = name + 'Net' + str(number).zfill(5) + '.json'
 
     # Loads the information for the Dürer net as data2
-    data2 = loadfile(filename)
+    data2 = loadfile(name, str(number).zfill(5))
 
     f = np.array(data2.get("Faces"))  # Stores face information for the Dürer net
     durer_edges = np.array(data2.get("Edges"))  # Stores edge information for the Dürer net
@@ -672,8 +668,7 @@ radius_bounding_circle finds the radius of the bounding circle of a net
 
 
 def radius_bounding_circle(name, number, plot):
-    filename = name + 'Net' + str(number) + '.json'
-    data = loadfile(filename)  # Stores net information as a dictionary
+    data = loadfile(name, number)  # Stores net information as a dictionary
     v = np.array(data.get("Vertices"))  # Loads vertices of the net
     f = np.array(data.get("Faces"))  # Loads faces of the net
     centers = findcenters(v, f)  # stores the centers of each face of the net
@@ -697,8 +692,7 @@ bounding_circle_2 stricter bounding circle
 
 
 def bounding_circle_2(name, number, plot):
-    filename = name + 'Net' + str(number) + '.json'
-    data = loadfile(filename)  # Stores net information as a dictionary
+    data = loadfile(name, number)  # Stores net information as a dictionary
     v = np.array(data.get("Vertices"))  # Loads vertices of the net
     dm = 0
     point1 = []
@@ -781,8 +775,7 @@ convex_hull is a function that finds the convex hull of a Dürer net
     # TODO: has code used in a lot of places. can probably add a function and shorten abt 100 lines throughout this file
     #  (the part storing vertices, edges, faces)
 def convex_hull(name, number, plot):
-    filename = name + 'Net' + str(number) + '.json'
-    data = loadfile(filename)  # Stores net information as a dictionary
+    data = loadfile(name, number)  # Stores net information as a dictionary
     v = np.array(data.get("Vertices"))  # stores vertices of Dürer net
     durer_edges = np.array(data.get("Edges"))  # stores edges of Dürer net
     f = np.array(data.get("Faces"))  # stores faces of Dürer net

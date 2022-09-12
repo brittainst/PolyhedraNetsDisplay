@@ -34,9 +34,8 @@ vcindex = [None for i in range(11)]
 for i in range(0, numofnets): # iterates through all nets
     # generates file name needed to call that net
     # .zfill(k) adds the number of zeros needed in the file name before the file number
-    filename = name + 'Net' + str(i).zfill(k) + '.json'
     # loads the target file
-    data = loadfile(filename)
+    data = loadfile(name, str(i).zfill(k))
     v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
     e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
     # calculates vertex score of the net we just pulled
