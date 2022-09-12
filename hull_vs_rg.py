@@ -16,7 +16,7 @@ rg_list = []
 for number in range(43380):
     # Calls the appropriate file in the database
     filename = name + 'Net' + str(number).zfill(5) + '.json'
-    data = loadfile(filename)
+    data = loadFile(filename, )
 
     # Stores the vertices and faces of the Dürer net as the arrays v and f
     v = np.array(data.get("Vertices"))
@@ -28,7 +28,7 @@ for number in range(43380):
     hull_area = convex_hull(name, str(number).zfill(5), False)[0]
 
     # Calculates the radius of gyration by calling the radiusg function
-    rg = radiusg(v, f)
+    rg = radius_of_gyration(v, f)
 
     # Appends the data found for this net to the appropriate lists
     ch_list.append(hull_area)

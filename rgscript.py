@@ -36,13 +36,13 @@ array = [[0, 0] for i in range(numofnets)]
 for i in range(0, numofnets):
     # Loads appropriate file as a dictionary
     #TODO: fix this whole loadfile mess across every function (check to make sure zfill works)
-    data = loadfile(name, str(i).zfill(k))
+    data = loadFile(name, str(i).zfill(k))
 
     v = np.array(data.get("Vertices"))  # stores vertices
     e = np.array(data.get("Edges"))  # stores edges
     f = np.array(data.get("Faces"))  # stores faces
-    rg = radiusg(v, f)  # tabulates radius of gyration
-    vc = countvc(name, v, e, False)  # tabulates number of vertex connections
+    rg = radius_of_gyration(v, f)  # tabulates radius of gyration
+    vc = countVC(name, v, e, False)  # tabulates number of vertex connections
     array[i] = [vc, rg]  # adds [number of vertex connections, radius of gyration to the corresponding entry in array
 
 # array2 is going to store the radius of gyration data, but each row is only radius of gyration data for that number

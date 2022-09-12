@@ -35,11 +35,11 @@ for i in range(0, numofnets): # iterates through all nets
     # generates file name needed to call that net
     # .zfill(k) adds the number of zeros needed in the file name before the file number
     # loads the target file
-    data = loadfile(name, str(i).zfill(k))
+    data = loadFile(name, str(i).zfill(k))
     v = np.array(data.get("Vertices"))  # Calls database entry as a list and then converts to an array
     e = np.array(data.get("Edges"))  # Calls database entry as a list and then converts to an array
     # calculates vertex score of the net we just pulled
-    vertexscore = countvc(name,v,e, False)
+    vertexscore = countVC(name, v, e, False)
 
     # adds 1 to the tally for how many nets there are with that many vertex connections
     vcquantity[vertexscore] += 1

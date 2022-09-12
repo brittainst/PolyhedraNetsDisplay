@@ -11,10 +11,10 @@ array = [35048, 43253, 43374, 19031, 27884, 22840, 41635, 16750, 10337, 33987, 9
 for i in array:
     filename = "Dodecahedron" + 'Net' + str(i).zfill(5) + '.json'
 
-    data = loadfile(filename)
+    data = loadFile(filename, )
     v = np.array(data.get("Vertices"))  # stores coordinates of vertices
     f = np.array(data.get("Faces"))  # stores the faces
-    rg = round(radiusg(v, f), 5)  # Calculates the radius of gyration of the net
+    rg = round(radius_of_gyration(v, f), 5)  # Calculates the radius of gyration of the net
     ch = round(convex_hull("Dodecahedron", str(i).zfill(5), False), 5)  # Calculates the area of the convex hull
 
     # prints output to terminal
