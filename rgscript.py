@@ -5,7 +5,7 @@ name = input("Enter the type of polyhedra:")
 
 numofnets = 0
 # This if statement sets two variables based on the type of net.
-# numofnets is the total number of nets of that type
+# numOfNets is the total number of nets of that type
 # k is the number of digits the number needs to have when it is part of the file name
 if name == 'Tetrahedron':
     numofnets = 2
