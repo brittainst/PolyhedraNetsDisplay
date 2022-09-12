@@ -14,6 +14,7 @@ def loadfile(name, number):
 ''' 
 Graphnet is a function that takes a list of vertices and edges as an input
 and outputs a plot of the net
+(SEE DRAWNET: graphnet is mainly used in other functions, drawnet draws more complex graphs)
 
 :args
 vlist: array of vertices from data
@@ -23,8 +24,7 @@ showvertices: Boolean to determine whether to plot the vertices and the edges, o
 linesty: Allows the user to enter a string to dictate the linestyle, i.e. solid edges, dashed edges, etcetera
 '''
 
-# TODO: find out whether graphnet is used in older code and if not, just keep drawnet (add graphnet code into draw  function, get rid of graphnet function)
-#  TODO: (see line 278)
+
 def graphnet(vlist, elist, clr, showvertices, linesty):
     if showvertices:
         w, z = vlist.T  # not really sure what this does
@@ -277,7 +277,6 @@ def diameter(name, number):
     return longestpathsbyvertex
 
 
-# TODO: find out whether graphnet is used in older code and if not, just keep drawnet (add graphnet code into draw function, get rid of graphnet function)
 '''
 drawnet is a function that graphs visual representations of Dürer net. It does slightly more than graphnet.
 graphnet just plots a graph given an vertex list and an edge list.
