@@ -181,36 +181,36 @@ def giveDegDist(name, number):
 
     # facegraph stores the data of which face is adjacent to which
     # TODO: find duplicates
-    facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
+    faceGraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
     # gives the number of faces the Dürer net has based on what type of net it is
     if name == 'Tetrahedron':
-        facequantity = 4
+        faceQuantity = 4
     elif name == 'Cube':
-        facequantity = 6
+        faceQuantity = 6
     elif name == 'Octahedron':
-        facequantity = 8
+        faceQuantity = 8
     elif name == 'Dodecahedron':
-        facequantity = 12
+        faceQuantity = 12
     else:
-        facequantity = 20
+        faceQuantity = 20
         # TODO: something above is funky (switch, add exception) (end of duplicates)
 
     # initializes an array to track how many vertices of each degree there are on the spanning tree
     # The ith entry stores the number of vertices of degree i + 1
-    degdistribution = [0, 0, 0, 0, 0]
+    degDistribution = [0, 0, 0, 0, 0]
 
     # Calculates the degree of each face in the net and adds 1 to the appropriate entry in degdistribution
-    for face in range(0, facequantity):
+    for face in range(0, faceQuantity):
         deg = 0
-        for edge in facegraph:
+        for edge in faceGraph:
             if face == int(edge[0]):
                 deg += 1
             if face == int(edge[1]):
                 deg += 1
         deg = deg / 2
-        degdistribution[int(deg) - 1] = degdistribution[int(deg) - 1] + 1
-    return degdistribution
+        degDistribution[int(deg) - 1] = degDistribution[int(deg) - 1] + 1
+    return degDistribution
 
 
 '''
@@ -219,33 +219,32 @@ leaves is a function that returns an array of the numbers of which vertices are 
 
 
 def leaves(name, number):
-    # I don't think we really used this function for anything so it doesn't really need to be cleaned up now
     data = loadFile(name, number)
-    facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
+    faceGraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
     if name == 'Tetrahedron':
-        facequantity = 4
+        faceQuantity = 4
     elif name == 'Cube':
-        facequantity = 6
+        faceQuantity = 6
     elif name == 'Octahedron':
-        facequantity = 8
+        faceQuantity = 8
     elif name == 'Dodecahedron':
-        facequantity = 12
+        faceQuantity = 12
     else:
-        facequantity = 20
+        faceQuantity = 20
 
-    listofleaves = []
+    listOfLeaves = []
 
-    for face in range(0, facequantity):
+    for face in range(0, faceQuantity):
         deg = 0
-        for edge in facegraph:
+        for edge in faceGraph:
             if face == int(edge[0]):
                 deg += 1
             if face == int(edge[1]):
                 deg += 1
         deg = deg / 2
         if deg == 1:
-            listofleaves.append(face)
-    return listofleaves
+            listOfLeaves.append(face)
+    return listOfLeaves
 
 
 '''
@@ -257,24 +256,24 @@ diameter is a function that finds the diameter / longest path across the spannin
 # TODO: Write a function that calculates facequantity based on the type of net
 def diameter(name, number):
     data = loadFile(name, number)
-    facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
+    faceGraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
     # pulls a list of all the numbers of the leaves in the net
-    listofleaves = leaves(name, number)
+    listOfLeaves = leaves(name, number)
     # starts an array to track the longest path starting from each leaf
-    longestpathsbyvertex = []
-    for i in range(0, len(listofleaves - 1)):  # iterates through each leaf except the last one
-        pathtracker = [i]  # starts the list with the vertex we are starting with
-        for j in range(0, len(pathtracker)):  # iterates through each path in pathtracker
-            numadjfound = 0
-            for edge in facegraph:
+    longestPathsByVertex = []
+    for i in range(0, len(listOfLeaves - 1)):  # iterates through each leaf except the last one
+        pathTracker = [i]  # starts the list with the vertex we are starting with
+        for j in range(0, len(pathTracker)):  # iterates through each path in pathtracker
+            numAdjFound = 0
+            for edge in faceGraph:
                 if int(edge[0]) == i:
-                    if numadjfound == 0:
-                        pathtracker[j].append(int(edge[1]))
+                    if numAdjFound == 0:
+                        pathTracker[j].append(int(edge[1]))
                     else:
-                        pathtracker.append(pathtracker[j])
-                        pathtracker[len(pathtracker)].append(int(edge[1]))
-        longestpathsbyvertex.append(pathtracker)
-    return longestpathsbyvertex
+                        pathTracker.append(pathTracker[j])
+                        pathTracker[len(pathTracker)].append(int(edge[1]))
+        longestPathsByVertex.append(pathTracker)
+    return longestPathsByVertex
 
 
 '''
@@ -285,18 +284,20 @@ convex hull, or numbering the faces
 '''
 
 
-def drawnet(name, number):
+def drawNet(name, number):
     # calls the appropriate file from the database and stores it as the dictionary data
     data = loadFile(name, number)
 
     # Pulls out information from data and stores it as separate arrays.
     # v holds vertex information, e holds edge information, f holds face information,
-    # and facegraph holds information about which face is next to which face in the Dürer net
+    # and faceGraph holds information about which face is next to which face in the Dürer net
     v = np.array(data.get("Vertices"))
     e = np.array(data.get("Edges"))
     x = data.keys()
     f = np.array(data.get("Faces"))
-    facegraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
+
+    # this variable is only used in lines of code that are manually commented & uncommented out
+    faceGraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
 
     # when enabled prints the radius of gyration of the Dürer net
     # print('Radius of Gyration = ' + str(radiusg(v, f)))
@@ -304,18 +305,18 @@ def drawnet(name, number):
     # plots the Dürer net in blue, only plots the edges, and uses a solid '-' line
     graphNet(v, e, 'blue', False, '-')
 
-    # stores the number of vertex connections as vertconnect
+    # stores the number of vertex connections as vertConnect
     # The boolean set to True also tells it to add those vertex connections to the plot
-    vertconnect = str(countVC(name, v, e, True))
+    vertConnect = str(countVC(name, v, e, True))
 
     # prints the number of vertex connections
-    print('Number of Vertex Connections = ' + vertconnect)
+    print('Number of Vertex Connections = ' + vertConnect)
 
-    # When enabled prints what the leaves are maybe? I don't know what enumeration it does this by though
+    # When enabled prints what the leaves are
     # print('The leaves are ' + str(leaves(name,number)))
 
     # UNCOMMENT THIS LINE TO PLOT SPANNING TREE OF THE NET
-    # graphnet(findcenters(v, f), facegraph, 'red', False)  # plots spanning tree of the net
+    # graphnet(findCenters(v, f), faceGraph, 'red', False)  # plots spanning tree of the net
 
     # numbers the faces of the graph
     centers = findCenters(v, f)  # finds the center of each face
@@ -324,12 +325,12 @@ def drawnet(name, number):
                  verticalalignment='center')
 
     # when enabled these three lines print the number of the net on the center of the 0th face
-    # xcoord = centers[0][0]
-    # ycoord = centers[0][1]
-    # plt.text(xcoord, ycoord, str(number), fontsize=8, horizontalalignment='center', verticalalignment='center')
+    # xCoord = centers[0][0]
+    # yCoord = centers[0][1]
+    # plt.text(xCoord, yCoord, str(number), fontsize=8, horizontalalignment='center', verticalalignment='center')
 
     plt.axis('scaled')  # Preserves 1:1 aspect ratio
-    plt.xlabel(name + ' Net ' + str(number) + ': V_c = ' + str(vertconnect))  # labels x axis
+    plt.xlabel(name + ' Net ' + str(number) + ': V_c = ' + str(vertConnect))  # labels x axis
 
     # the next few lines finds the center of mass of the Dürer net
     centermass = [0, 0]  # Initializes a variable for center of mass
@@ -351,9 +352,9 @@ effectively this would return the neighboring vertices of the original vertex.
 '''
 
 
-def neighbors(face, bindlist):
+def neighbors(face, bindList):
     list_of_neighbors = []
-    for binding in bindlist:
+    for binding in bindList:
         if binding[0] == face:
             list_of_neighbors.append(binding[1])
         if binding[1] == face:
@@ -400,12 +401,12 @@ def draw_schlegel(name, number):
     # This tells us where to place the number on each face
     centers_of_faces = []
     for face in internal_faces:
-        xsum = 0
-        ysum = 0
+        xSum = 0
+        ySum = 0
         for vertex in face:
-            xsum += v[vertex][0]
-            ysum += v[vertex][1]
-        centers_of_faces.append([xsum / 5, ysum / 5])
+            xSum += v[vertex][0]
+            ySum += v[vertex][1]
+        centers_of_faces.append([xSum / 5, ySum / 5])
     # Since the 11th and final face is indicated by the area outside of the Schlegel diagram
     # We append a final coordinate that is placed arbitrary outside the diagram
     centers_of_faces.append([4, 4])
@@ -609,10 +610,10 @@ def draw_schlegel(name, number):
         plt.fill(xlist, ylist, facecolor="#0288d1")  # plots and shades the given face
 
     # when enabled, plots the vertices and edges of the Schlegel diagram
-    # graphnet(np.array(v), np.array(e), "blue", True, "-")
+    # graphNet(np.array(v), np.array(e), "blue", True, "-")
 
     # when enabled, plots a white background under the lines for the cutting tree
-    # graphnet(np.array(v), cutting_tree_edge_list, "white", False, "-")
+    # graphNet(np.array(v), cutting_tree_edge_list, "white", False, "-")
 
     # plots the cutting tree on the Schlegel diagram
     graphNet(np.array(v), cutting_tree_edge_list, "red", False, "-")
@@ -632,7 +633,7 @@ def draw_schlegel(name, number):
 center_of_mass is a function that returns the center of mass of a list of points
 '''
 
-
+#TODO: find places where this function should be implemented and isn't
 def center_of_mass(points):
     # sets initial values for the x and y coordinates of the center of mass
     cmx = 0
@@ -650,13 +651,13 @@ dist a function that returns the distance between two points
 '''
 
 
-def dist(point1, point2):  # Finds the distance between two points
+def distance(point1, point2):  # Finds the distance between two points
     x_1 = point1[0]  # stores x coordinate of first point
     y_1 = point1[1]  # stores y coordinate of first point
     x_2 = point2[0]  # stores x coordinate of second point
     y_2 = point2[1]  # stores y coordinate of second point
-    dsquared = math.pow(x_1 - x_2, 2) + math.pow(y_1 - y_2, 2)  # distance formula for d^2
-    d = math.sqrt(dsquared)  # takes square root to find distance
+    dSquared = math.pow(x_1 - x_2, 2) + math.pow(y_1 - y_2, 2)  # distance formula for d^2
+    d = math.sqrt(dSquared)  # takes square root to find distance
     return d  # returns distance
 
 
@@ -673,7 +674,7 @@ def radius_bounding_circle(name, number, plot):
     cent_mass = center_of_mass(centers)  # finds center of mass of the net
     distances = []  # an array to store how far each vertex of the durer net is from the center of the net
     for vertex in v:
-        distances.append(dist(vertex, cent_mass))
+        distances.append(distance(vertex, cent_mass))
     radius = max(distances)
 
     if plot:
@@ -697,7 +698,7 @@ def bounding_circle_2(name, number, plot):
     point2 = []
     for vertex in v:
         for vertex2 in v:
-            temp = dist(vertex, vertex2)
+            temp = distance(vertex, vertex2)
             if temp > dm:
                 point1 = vertex
                 point2 = vertex2
@@ -896,9 +897,9 @@ def convex_hull(name, number, plot):
     for i in range(len(new_vertex_order)):
         p1 = reordered_vertex_coordinates[i - 1]
         p2 = reordered_vertex_coordinates[i]
-        a = dist([0, 0], p1)
-        b = dist([0, 0], p2)
-        c = dist(p1, p2)
+        a = distance([0, 0], p1)
+        b = distance([0, 0], p2)
+        c = distance(p1, p2)
         s = (a + b + c) / 2
         A = math.sqrt(s * (s - a) * (s - b) * (s - c))
         area += A
@@ -907,7 +908,7 @@ def convex_hull(name, number, plot):
     # using the dist() function defined earlier
     perimeter = 0
     for i in range(len(reordered_vertex_coordinates)):
-        perimeter += dist(reordered_vertex_coordinates[i - 1], reordered_vertex_coordinates[i])
+        perimeter += distance(reordered_vertex_coordinates[i - 1], reordered_vertex_coordinates[i])
 
     # If variable plot is True, plots the convex hull
     if plot:
