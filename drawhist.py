@@ -1,3 +1,5 @@
+#TODO: see if it's okay to hide this file in github
+
 from functions import *
 import statistics as stat
 import matplotlib.lines as mlines

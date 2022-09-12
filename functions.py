@@ -22,7 +22,8 @@ showvertices: Boolean to determine whether to plot the vertices and the edges, o
 linesty: Allows the user to enter a string to dictate the linestyle, i.e. solid edges, dashed edges, etcetera
 '''
 
-
+# TODO: find out whether graphnet is used in older code and if not, just keep drawnet (add graphnet code into draw function, get rid of graphnet function)
+# TODO: (see line 278)
 def graphnet(vlist, elist, clr, showvertices, linesty):
     if showvertices:
         w, z = vlist.T  # not really sure what this does
@@ -116,6 +117,7 @@ def countvc(net_type, vlist, elist, scatter):
     target = 0
     numbervc = 0
 
+# TODO: change to switch function
     # takes user input to determine the degree needed to be a vertex connection
     if net_type == 'Tetrahedron':
         target = 4
@@ -156,6 +158,7 @@ def degree(vertex, edge_list):
 
     # Calculates the number of incident edges to 'vertex'
     for edge in edge_list:
+        # TODO: shorten if statement to if or
         if vertex == int(edge[0]):
             deg += 1
         if vertex == int(edge[1]):
@@ -190,6 +193,7 @@ def giveDegDist(name, number):
         facequantity = 12
     else:
         facequantity = 20
+        #TODO: something above is funky (switch, add exception)
 
     # initializes an array to track how many vertices of each degree there are on the spanning tree
     # The ith entry stores the number of vertices of degree i + 1
@@ -274,6 +278,7 @@ def diameter(name, number):
     return longestpathsbyvertex
 
 
+# TODO: find out whether graphnet is used in older code and if not, just keep drawnet (add graphnet code into draw function, get rid of graphnet function)
 '''
 drawnet is a function that graphs visual representations of Dürer net. It does slightly more than graphnet.
 graphnet just plots a graph given an vertex list and an edge list.
@@ -363,7 +368,7 @@ def neighbors(face, bindlist):
 draw_schlegel is a function that draws the schlegel diagram of a dodecahedron
 '''
 
-
+#TODO: there's gotta be a better way to do some of this but idk exactly what yet
 def draw_schlegel(name, number):
     data = loadfile("dodecahedron.json")  # loads file that contains the data of the shape of the Schlegel diagram
     y = data.get("links")  # pulls out the edge information from the file
@@ -758,6 +763,7 @@ def generate_angles(points):
         angles.append(measure)  # appends to list of angles
     angles.append(angle(points[-2], points[-1], points[0]))  # appends angle for last set of coordinates in list points
 
+    # TODO: check this loop
     # Checks that the angles are positive, and if negative does 360 - output to make them positive
     # This might be redundant but I'm not sure
     for i in range(len(angles)):
@@ -772,7 +778,8 @@ def generate_angles(points):
 convex_hull is a function that finds the convex hull of a Dürer net
 '''
 
-
+    # TODO: has code used in a lot of places. can probably add a function and shorten abt 100 lines throughout this file
+    #  (the part storing vertices, edges, faces)
 def convex_hull(name, number, plot):
     filename = name + 'Net' + str(number) + '.json'
     data = loadfile(filename)  # Stores net information as a dictionary
@@ -819,6 +826,9 @@ def convex_hull(name, number, plot):
     # This for loop builds the new vertex order by taking the last vertex and finding the edge along the boundary
     # that includes it, and another vertex that is not already in the new vertex order. Then it appends that
     # new vertex to the vertex order.
+
+    #TODO: fix the interior/exterior error (even if it works as is!)
+
     for i in range(1, z):
         for edge in edges:
             if new_vertex_order[i-1] == edge[0] and edge[1] not in new_vertex_order:
@@ -839,6 +849,8 @@ def convex_hull(name, number, plot):
     # We do this using the compare string
     string = data.get("CmpString")
     marker = False
+
+    #TODO: add switch
 
     # The first entry in the compare string tells us what the first angle in our list angles should be
     if string[0] == "A":
@@ -878,6 +890,7 @@ def convex_hull(name, number, plot):
     # We now want to find the edges that make up the convex hull
     # HULL_EDGES AND THE FOLLOWING FOR LOOP ARE NOT NEEDED FOR CALCULATING AREA
     # THEY ARE ONLY NEEDED FOR CALLING GRAPHNET TO ADD THE CONVEX HULL TO THE PLOT
+    #TODO: move this, possibly
     hull_edges = []
 
     # once the process of deleting vertices is finished

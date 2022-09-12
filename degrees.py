@@ -1,5 +1,6 @@
 from functions import *
 
+#TODO: if name
 name = input("Enter the type of polyhedra:")
 
 numofnets = 0

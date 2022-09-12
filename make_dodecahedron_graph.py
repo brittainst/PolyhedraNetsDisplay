@@ -2,6 +2,8 @@
 THIS CODE TAKEN FROM ANOTHER CREATOR ALONG WITH THE CORRESPONDING .json file. Altered original code to be a function
 '''
 
+#TODO: either proper citation or git ignore
+
 import json
 import numpy as np
 import matplotlib.pyplot as plt

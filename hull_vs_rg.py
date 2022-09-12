@@ -12,6 +12,7 @@ rg_list = []
 
 # This for loop finds the area of the convex hull and the radius of gyration for each net, and then appends them to
 # ch_list and rg_list respectively
+#TODO: maybe make an "all" or "input" option
 for number in range(43380):
     # Calls the appropriate file in the database
     filename = name + 'Net' + str(number).zfill(5) + '.json'

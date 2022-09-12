@@ -1,5 +1,6 @@
 from functions import *
 
+#TODO: if name
 name = input("Enter the type of polyhedra:")
 
 numofnets = 0
@@ -34,6 +35,7 @@ array = [[0, 0] for i in range(numofnets)]
 # for each Dürer net
 for i in range(0, numofnets):
     # Loads appropriate file as a dictionary
+    #TODO: fix this whole loadfile mess across every function
     filename = name + 'Net' + str(i).zfill(k) + '.json'
     data = loadfile(filename)
 

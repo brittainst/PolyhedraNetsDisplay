@@ -1,3 +1,5 @@
+#TODO: make this a .json file
+
 # This file generates radius of gyration versus perimeter of convex hull scatter plot
 # The code here doesn't need to be cleaned up so much as pr_list and rg_list need to make their way into
 # a .json file

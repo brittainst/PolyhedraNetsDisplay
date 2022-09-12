@@ -1,8 +1,11 @@
+#TODO: mini docstring
+
 from functions import *
 import random
 
 name = input("Enter the type of polyhedra:")
 
+#TODO: please make the if name thing universal. all these repeated lines are driving me crazy (if name)
 numofnets = 0
 # This if statement sets two variables based on the type of net.
 # numofnets is the total number of nets of that type

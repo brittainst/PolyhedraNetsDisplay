@@ -1,4 +1,5 @@
 # This was me experimenting (and failing) with trying to write data to a csv file.
+#TODO: remove from git
 
 import csv
 

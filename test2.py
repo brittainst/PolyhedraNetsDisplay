@@ -1,6 +1,8 @@
 # This script was used to generate the radius of gyration and the convex hull data for the 27 Dürer nets
 # that Julie was looking at
 
+#TODO: rename as example, maybe
+
 from functions import *
 
 array = [35048, 43253, 43374, 19031, 27884, 22840, 41635, 16750, 10337, 33987, 9025, 23207, 33980, 40881, 32036, 5886,

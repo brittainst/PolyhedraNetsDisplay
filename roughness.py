@@ -1,5 +1,4 @@
 import json  # Allows us to read json files
-# This file is just a product of something I was working on with Dr. Jungck.
 # It just scans through the roughness of each net, to find the minimum and maximum roughness
 # Also pulls out all possible values of roughness
 from functions import *
@@ -11,6 +10,7 @@ maxrough = 0
 possible_values = []
 for i in range(43380):
     # calls the appropriate file from the database and stores it as the dictionary data
+    #TODO: loadfile thing
     filename = name + 'Net' + str(i).zfill(5) + '.json'
     data = loadfile(filename)
     roughness = data["NetInfo"].get("Roughness")

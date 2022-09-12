@@ -1,9 +1,9 @@
-# Takes the arrays used to plot radius of gyration versus convex hull from hull_vs_rg
+    #TODO: think of name for this file
+Takes the arrays used to plot radius of gyration versus convex hull from hull_vs_rg
 # Sorts the data by number of vertex connections and makes a scatter plot of radius of gyration vs area of convex hull
 # for each number of vertex connections.
 # The first few lines of code contain 3 massive arrays that store the initial data
-# Ideally this data would be stored in a .json file or a .csv file and then be called upon instead of being stored
-# in the code itself
+    # TODO: Ideally this data would be stored in a .json file or a .csv file and then be called upon instead of being stored in the code itself
 # The ith entry of ch_list stores the area of the convex hull of the ith Dodecahedron Dürer net
 # The ith entry of rg_list stores teh radius of gyration of the ith Dodecahedron Dürer net
 # The ith entry of vc_list stores the number of vertex connections of the ith Dodecahedron Dürer net
