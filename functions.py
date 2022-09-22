@@ -369,10 +369,15 @@ draw_schlegel is a function that draws the schlegel diagram of a dodecahedron
 
 # TODO: there's gotta be a better way to do some of this but idk exactly what yet
 def draw_schlegel(name, number):
-    data = loadFile("dodecahedron.json", )  # loads file that contains the data of the shape of the Schlegel diagram
+
+    # THESE THREE LINES CANNOT BE OPTIMIZED WITH THE LOADFILE FUNCTION
+    filename = 'dodecahedron.json'
+    with open(filename) as json_file:  # Calls a particular .json file
+        data = json.load(json_file)  # Stores the contents of the database as a list
+
     y = data.get("links")  # pulls out the edge information from the file
     z = data.get("nodes")  # pulls out the vertex coordinates information from the file
-
+    print(y)
     # Takes the edge information and restores it in a more desirable format
     e = []
     for i in range(30):
@@ -932,3 +937,4 @@ def generate_perimeter_list():
         perimeter_list.append(convex_hull("Dodecahedron", str(i).zfill(5), False)[1])
 
     return perimeter_list
+

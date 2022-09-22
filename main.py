@@ -26,6 +26,7 @@ drawNet(name, str(number).zfill(5))
 [area, perimeter] = convex_hull(name, str(number).zfill(5), True)
 print(area)
 print(perimeter)
+
 # When uncommented, draws a bounding circle that is slightly too big
 # radius = radius_bounding_circle(name, number, True)
 
@@ -33,6 +34,7 @@ print(perimeter)
 # radius2 = bounding_circle_2(name, number, True)
 # print("Radius of bounding circle is " + str(radius) + ", " + str(radius2))
 
+# UNCOMMENT FOR SCHLEGEL
 # starts a new matplotlib figure
 plot2 = plt.figure(2)
 # draws the corresponding Schlegel diagram
