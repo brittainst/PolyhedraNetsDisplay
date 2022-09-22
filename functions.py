@@ -52,7 +52,7 @@ flist: array of faces from data
 
 def findCenters(vList, fList):
     # Initializes an array to store the coordinates of the centers of the faces
-    FaceCenters = np.zeros((len(fList), 2))
+    faceCenters = np.zeros((len(fList), 2))
     i = -1  # Starts a counter to keep track of which face is selected
 
     for face in fList:
@@ -65,8 +65,8 @@ def findCenters(vList, fList):
         # Divides by the number of faces to find the coordinates of the center of the face
         center_of_face[0] = center_of_face[0] / len(face)
         center_of_face[1] = center_of_face[1] / len(face)
-        FaceCenters[i] = center_of_face  # Stores the coordinates in the array of face centers
-    return (FaceCenters)
+        faceCenters[i] = center_of_face  # Stores the coordinates in the array of face centers
+    return (faceCenters)
 
 
 ''' 
@@ -82,19 +82,19 @@ flist: array of faces from data
 
 def radius_of_gyration(vList, fList):
     FaceCenters = findCenters(vList, fList)
-    centermass = [0, 0]  # Initializes a variable for center of mass
+    centerMass = [0, 0]  # Initializes a variable for center of mass
     for center in FaceCenters:  # Averages the centers of the faces to find center of mass
-        centermass = np.add(centermass, center)
-    centermass[0] = centermass[0] / len(FaceCenters)
-    centermass[1] = centermass[1] / len(FaceCenters)
+        centerMass = np.add(centerMass, center)
+    centerMass[0] = centerMass[0] / len(FaceCenters)
+    centerMass[1] = centerMass[1] / len(FaceCenters)
 
     # Performs calculation for the value of the radius of gyration
     rgsquared = 0
     for center in FaceCenters:
         x = center[0]
         y = center[1]
-        xBar = centermass[0]
-        yBar = centermass[1]
+        xBar = centerMass[0]
+        yBar = centerMass[1]
         rgsquared = rgsquared + pow(x - xBar, 2) + pow(y - yBar, 2)
 
     # Takes the square root to find the actual value of the radius of gyration
@@ -160,10 +160,10 @@ def degree(vertex, edge_list):
     # Calculates the number of incident edges to 'vertex'
     for edge in edge_list:
         # TODO: shorten if statement to if or
-        if vertex == int(edge[0]):
+        if vertex == int(edge[0]) or vertex == int(edge[1]):
             deg += 1
-        if vertex == int(edge[1]):
-            deg += 1
+        # if vertex == int(edge[1]):
+          #  deg += 1
     return deg  # returns the degree of the vertex
 
 
@@ -261,7 +261,7 @@ def diameter(name, number):
     listOfLeaves = leaves(name, number)
     # starts an array to track the longest path starting from each leaf
     longestPathsByVertex = []
-    for i in range(0, len(listOfLeaves - 1)):  # iterates through each leaf except the last one
+    for i in range(0, len(listOfLeaves) - 1):  # iterates through each leaf except the last one
         pathTracker = [i]  # starts the list with the vertex we are starting with
         for j in range(0, len(pathTracker)):  # iterates through each path in pathtracker
             numAdjFound = 0
