@@ -339,6 +339,9 @@ def drawNet(name, number):
     centermass[0] = centermass[0] / len(centers)
     centermass[1] = centermass[1] / len(centers)
 
+    # Adds the center of mass of the net to the plot
+    plt.scatter([centermass[0]], [centermass[1]], color='red', s=60)
+
     # sets the scale of the plot based on the center of mass of the center of mass of the net.
     plt.xlim([centermass[0] - 7, centermass[0] + 7])
     plt.ylim([centermass[1] - 7, centermass[1] + 7])

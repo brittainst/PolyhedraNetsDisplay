@@ -36,8 +36,8 @@ print(perimeter)
 
 # UNCOMMENT FOR SCHLEGEL
 # starts a new matplotlib figure
-plot2 = plt.figure(2)
+# plot2 = plt.figure(2)
 # draws the corresponding Schlegel diagram
-draw_schlegel(name, number)
+# draw_schlegel(name, number)
 
 plt.show()
