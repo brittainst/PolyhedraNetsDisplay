@@ -16,7 +16,7 @@ rg_list = []
 for number in range(43380):
     # Calls the appropriate file in the database
     filename = name + 'Net' + str(number).zfill(5) + '.json'
-    data = loadFile(filename, )
+    data = loadFile(name, str(number).zfill(5))
 
     # Stores the vertices and faces of the Dürer net as the arrays v and f
     v = np.array(data.get("Vertices"))

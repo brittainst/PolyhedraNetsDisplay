@@ -17,7 +17,8 @@ correlation = np.corrcoef(pr_list, rg_list)[0, 1]
 r_squared = correlation ** 2
 
 # Labels the x-axis, y-axis, and the title of the diagram
-plt.xlabel("Perimeter of Convex Hull" + "R^2 = " + str(round(r_squared, 3)))
+plt.xlabel("Perimeter of Convex Hull")
+# plt.xlabel("Perimeter of Convex Hull" + "R^2 = " + str(round(r_squared, 3)))
 plt.ylabel("Radius of Gyration")
 plt.title("Radius of Gyration versus Perimeter of Convex Hull")
 
