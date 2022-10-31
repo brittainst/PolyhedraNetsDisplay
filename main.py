@@ -22,10 +22,12 @@ array2 = [7725, 9023, 11463, 13645, 18975, 22159, 24417, 33681, 35048, 35934, 39
 # starts a new matplotlib figure
 # TODO: docstring for bounding circles, drawing nets
 plot1 = plt.figure(1)
-drawNet(name, str(number).zfill(5))
-[area, perimeter] = convex_hull(name, str(number).zfill(5), True)
-print(area)
-print(perimeter)
+drawNet(name, str(number))
+
+#drawNet(name, str(number).zfill(5))
+# [area, perimeter] = convex_hull(name, str(number).zfill(5), True)
+# print(area)
+# print(perimeter)
 
 # When uncommented, draws a bounding circle that is slightly too big
 # radius = radius_bounding_circle(name, number, True)
@@ -40,4 +42,6 @@ print(perimeter)
 # draws the corresponding Schlegel diagram
 # draw_schlegel(name, number)
 
+
+plt.savefig("2x2 graphic", dpi=900)  # Saves the output file
 plt.show()

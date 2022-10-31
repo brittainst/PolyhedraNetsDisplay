@@ -28,7 +28,7 @@ linesty: Allows the user to enter a string to dictate the linestyle, i.e. solid 
 def graphNet(vList, eList, clr, showVertices, lineSty):
     if showVertices:
         w, z = vList.T  # not really sure what this does
-        plt.scatter(w, z)  # plots the vertices
+        plt.scatter(w, z,alpha=1)  # plots the vertices
 
     # For each edge in edge list,
     # Finds the coordinates for each endpoint and plots the line segment
@@ -143,7 +143,7 @@ def countVC(net_type, vList, eList, scatter):
         if deg == target:
             # If user sets scatter TRUE, then adds the coordinates of the vertex connections to a scatter plot
             if scatter:
-                plt.scatter(vList[i][0], vList[i][1], color='black', s=60)
+                plt.scatter(vList[i][0], vList[i][1], color='red', s=60)
             numberVC += 1
     return numberVC  # returns the vertex score for that net
 
@@ -284,7 +284,7 @@ convex hull, or numbering the faces
 '''
 
 
-def drawNet(name, number):
+def drawNet(name, number, numberfaces=False):
     # calls the appropriate file from the database and stores it as the dictionary data
     data = loadFile(name, number)
 
@@ -302,8 +302,8 @@ def drawNet(name, number):
     # when enabled prints the radius of gyration of the Dürer net
     # print('Radius of Gyration = ' + str(radiusg(v, f)))
 
-    # plots the Dürer net in blue, only plots the edges, and uses a solid '-' line
-    graphNet(v, e, 'blue', False, '-')
+    # plots the Dürer net in black, only plots the edges, and uses a solid '-' line
+    graphNet(v, e, 'black', False, '-')
 
     # stores the number of vertex connections as vertConnect
     # The boolean set to True also tells it to add those vertex connections to the plot
@@ -316,12 +316,13 @@ def drawNet(name, number):
     # print('The leaves are ' + str(leaves(name,number)))
 
     # UNCOMMENT THIS LINE TO PLOT SPANNING TREE OF THE NET
-    # graphnet(findCenters(v, f), faceGraph, 'red', False)  # plots spanning tree of the net
+    # graphNet(findCenters(v, f), faceGraph, 'blue', True,'-')  # plots spanning tree of the net
 
     # numbers the faces of the graph
     centers = findCenters(v, f)  # finds the center of each face
-    for i in range(0, len(centers)):  # for each face, plots the number of the face on the faces center
-        plt.text(centers[i][0], centers[i][1], str(i), fontsize=12, horizontalalignment='center',
+    if numberfaces:
+        for i in range(0, len(centers)):  # for each face, plots the number of the face on the faces center
+            plt.text(centers[i][0], centers[i][1], str(i), fontsize=12, horizontalalignment='center',
                  verticalalignment='center')
 
     # when enabled these three lines print the number of the net on the center of the 0th face
@@ -339,8 +340,9 @@ def drawNet(name, number):
     centermass[0] = centermass[0] / len(centers)
     centermass[1] = centermass[1] / len(centers)
 
-    # Adds the center of mass of the net to the plot
-    plt.scatter([centermass[0]], [centermass[1]], color='red', s=60)
+    if numberfaces:
+        # Adds the center of mass of the net to the plot
+        plt.scatter([centermass[0]], [centermass[1]], color='red', s=60)
 
     # sets the scale of the plot based on the center of mass of the center of mass of the net.
     plt.xlim([centermass[0] - 7, centermass[0] + 7])
