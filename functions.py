@@ -284,7 +284,7 @@ convex hull, or numbering the faces
 '''
 
 
-def drawNet(name, number, numberfaces=True):
+def drawNet(name, number, numberfaces=False, vc=True):
     # calls the appropriate file from the database and stores it as the dictionary data
     data = loadFile(name, number)
 
@@ -307,10 +307,11 @@ def drawNet(name, number, numberfaces=True):
 
     # stores the number of vertex connections as vertConnect
     # The boolean set to True also tells it to add those vertex connections to the plot
-    vertConnect = str(countVC(name, v, e, True))
+    if vc== True:
+        vertConnect = str(countVC(name, v, e, True))
 
-    # prints the number of vertex connections
-    print('Number of Vertex Connections = ' + vertConnect)
+        # prints the number of vertex connections
+        print('Number of Vertex Connections = ' + vertConnect)
 
     # When enabled prints what the leaves are
     # print('The leaves are ' + str(leaves(name,number)))
@@ -331,7 +332,10 @@ def drawNet(name, number, numberfaces=True):
     # plt.text(xCoord, yCoord, str(number), fontsize=8, horizontalalignment='center', verticalalignment='center')
 
     plt.axis('scaled')  # Preserves 1:1 aspect ratio
-    plt.xlabel(name + ' Net ' + str(number) + ': V_c = ' + str(vertConnect))  # labels x axis
+    if vc==True:
+        plt.xlabel(name + ' Net ' + str(number) + ': V_c = ' + str(vertConnect))  # labels x axis
+    else:
+        plt.xlabel(name + 'Net' + str(number))
 
     # the next few lines finds the center of mass of the Dürer net
     centermass = [0, 0]  # Initializes a variable for center of mass

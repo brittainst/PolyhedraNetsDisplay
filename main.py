@@ -22,10 +22,10 @@ array2 = [7725, 9023, 11463, 13645, 18975, 22159, 24417, 33681, 35048, 35934, 39
 # starts a new matplotlib figure
 # TODO: docstring for bounding circles, drawing nets
 plot1 = plt.figure(1)
-drawNet(name, str(number))
+drawNet(name, str(number), numberfaces=True)
 
 #drawNet(name, str(number).zfill(5))
-[area, perimeter] = convex_hull(name, str(number).zfill(5), True)
+#[area, perimeter] = convex_hull(name, str(number).zfill(5), True)
 # print(area)
 # print(perimeter)
 
