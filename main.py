@@ -25,7 +25,7 @@ plot1 = plt.figure(1)
 drawNet(name, str(number))
 
 #drawNet(name, str(number).zfill(5))
-# [area, perimeter] = convex_hull(name, str(number).zfill(5), True)
+[area, perimeter] = convex_hull(name, str(number).zfill(5), True)
 # print(area)
 # print(perimeter)
 
@@ -43,5 +43,5 @@ drawNet(name, str(number))
 # draw_schlegel(name, number)
 
 
-plt.savefig("2x2 graphic", dpi=900)  # Saves the output file
+# plt.savefig("2x2 graphic", dpi=900)  # Saves the output file
 plt.show()

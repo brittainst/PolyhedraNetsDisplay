@@ -143,7 +143,7 @@ def countVC(net_type, vList, eList, scatter):
         if deg == target:
             # If user sets scatter TRUE, then adds the coordinates of the vertex connections to a scatter plot
             if scatter:
-                plt.scatter(vList[i][0], vList[i][1], color='red', s=60)
+                plt.scatter(vList[i][0], vList[i][1], color='black', s=60)
             numberVC += 1
     return numberVC  # returns the vertex score for that net
 
@@ -284,7 +284,7 @@ convex hull, or numbering the faces
 '''
 
 
-def drawNet(name, number, numberfaces=False):
+def drawNet(name, number, numberfaces=True):
     # calls the appropriate file from the database and stores it as the dictionary data
     data = loadFile(name, number)
 
@@ -303,7 +303,7 @@ def drawNet(name, number, numberfaces=False):
     # print('Radius of Gyration = ' + str(radiusg(v, f)))
 
     # plots the Dürer net in black, only plots the edges, and uses a solid '-' line
-    graphNet(v, e, 'black', False, '-')
+    graphNet(v, e, 'blue', False, '-')
 
     # stores the number of vertex connections as vertConnect
     # The boolean set to True also tells it to add those vertex connections to the plot
