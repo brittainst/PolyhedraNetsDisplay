@@ -25,7 +25,7 @@ linesty: Allows the user to enter a string to dictate the linestyle, i.e. solid 
 '''
 
 
-def graphNet(vList, eList, clr, showVertices, lineSty):
+def graphNet(vList, eList, clr, alphaval, showVertices, lineSty):
     if showVertices:
         w, z = vList.T  # not really sure what this does
         plt.scatter(w, z,alpha=1)  # plots the vertices
@@ -37,7 +37,7 @@ def graphNet(vList, eList, clr, showVertices, lineSty):
         point2 = vList[int(x[1])]
         x_values = [point1[0], point2[0]]
         y_values = [point1[1], point2[1]]
-        plt.plot(x_values, y_values, color=clr, linestyle=lineSty)
+        plt.plot(x_values, y_values, color=clr, alpha=alphaval, linestyle=lineSty)
 
 
 '''
@@ -303,7 +303,7 @@ def drawNet(name, number, numberfaces=False, vc=True):
     # print('Radius of Gyration = ' + str(radiusg(v, f)))
 
     # plots the Dürer net in black, only plots the edges, and uses a solid '-' line
-    graphNet(v, e, 'blue', False, '-')
+    graphNet(v, e, 'blue', 1, False, '-')
 
     # stores the number of vertex connections as vertConnect
     # The boolean set to True also tells it to add those vertex connections to the plot

@@ -6,7 +6,8 @@
 from functions import *
 
 # gets user input on which file to open
-name = input("Enter the type of polyhedra:")
+#name = input("Enter the type of polyhedra:")
+name = "Icosahedron"
 number = input("Enter the net number:")
 
 # TODO: move these arrays to another file; used for related research but not to run main
@@ -25,7 +26,7 @@ plot1 = plt.figure(1)
 drawNet(name, str(number), numberfaces=True)
 
 #drawNet(name, str(number).zfill(5))
-#[area, perimeter] = convex_hull(name, str(number).zfill(5), True)
+# [area, perimeter] = convex_hull(name, str(number).zfill(5), True)
 # print(area)
 # print(perimeter)
 

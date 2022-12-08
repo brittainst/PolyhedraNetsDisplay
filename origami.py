@@ -28,8 +28,8 @@ for i in range(len(durer_edges)):  # for each edge of the Dürer net
         edges.append(durer_edges[i])  # append the edge to the list of edges that make up the boundary.
     else:
         interior_edges.append(durer_edges[i])
-graphNet(v, interior_edges, 'b', False, '-')
-graphNet(v, edges, 'k', False, '-')
+graphNet(v, interior_edges, 'b', 0.23227777777, False, '-')
+graphNet(v, edges, 'k', 1, False, '-')
 plt.axis('scaled')  # Preserves 1:1 aspect ratio
 plt.axis('off')
 plt.savefig(str(name+number)+'.svg', format='svg', dpi=900)
