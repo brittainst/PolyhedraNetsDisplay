@@ -2,6 +2,37 @@ import numpy as np
 import math
 from matplotlib import pyplot as plt  # Imports matplotlib so we can plot coordinates
 import json  # Allows us to read json files
+from matplotlib.figure import Figure
+from tkinter import *
+import tkinter as tk
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+
+def concat_length(string):
+    z = -1
+    if string == "Tetrahedron":
+        z = 1
+    elif string == "Cube" or string == "Octahedron":
+        z = 2
+    elif string == "Dodecahedron" or string == "Icosahedron":
+        z = 5
+    if z == -1:
+        print("Spelling Error")
+    if z > 0:
+        return z
+
+def num_of_nets(string):
+    z = -1
+    if string == "Tetrahedron":
+        z = 2
+    elif string == "Cube" or string == "Octahedron":
+        z = 11
+    elif string == "Dodecahedron" or string == "Icosahedron":
+        z = 43380
+    if z == -1:
+        print("Spelling Error")
+    if z > 0:
+        return z
 
 
 def loadFile(name, number):
@@ -28,7 +59,7 @@ linesty: Allows the user to enter a string to dictate the linestyle, i.e. solid 
 def graphNet(vList, eList, clr, alphaval, showVertices, lineSty):
     if showVertices:
         w, z = vList.T  # not really sure what this does
-        plt.scatter(w, z,alpha=1)  # plots the vertices
+        plt.scatter(w, z, alpha=1)  # plots the vertices
 
     # For each edge in edge list,
     # Finds the coordinates for each endpoint and plots the line segment
@@ -38,7 +69,6 @@ def graphNet(vList, eList, clr, alphaval, showVertices, lineSty):
         x_values = [point1[0], point2[0]]
         y_values = [point1[1], point2[1]]
         plt.plot(x_values, y_values, color=clr, alpha=alphaval, linestyle=lineSty)
-
 
 '''
 findcenters is a function that finds the centers of the faces of a net
@@ -284,7 +314,7 @@ convex hull, or numbering the faces
 '''
 
 
-def drawNet(name, number, numberfaces=False, vc=True):
+def drawNet(name, number, numberfaces=False, vc=False, showVertices=False):
     # calls the appropriate file from the database and stores it as the dictionary data
     data = loadFile(name, number)
 
@@ -303,7 +333,7 @@ def drawNet(name, number, numberfaces=False, vc=True):
     # print('Radius of Gyration = ' + str(radiusg(v, f)))
 
     # plots the Dürer net in black, only plots the edges, and uses a solid '-' line
-    graphNet(v, e, 'blue', 1, False, '-')
+    graphNet(v, e, 'blue', 1, showVertices, '-')
 
     # stores the number of vertex connections as vertConnect
     # The boolean set to True also tells it to add those vertex connections to the plot
