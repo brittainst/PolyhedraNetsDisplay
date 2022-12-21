@@ -314,7 +314,7 @@ convex hull, or numbering the faces
 '''
 
 
-def drawNet(name, number, numberfaces=False, vc=False, showVertices=False):
+def drawNet(name, number, numberfaces=False, vc=False, showVertices=False, spanning=False):
     # calls the appropriate file from the database and stores it as the dictionary data
     data = loadFile(name, number)
 
@@ -341,13 +341,14 @@ def drawNet(name, number, numberfaces=False, vc=False, showVertices=False):
         vertConnect = str(countVC(name, v, e, True))
 
         # prints the number of vertex connections
-        print('Number of Vertex Connections = ' + vertConnect)
+        # print('Number of Vertex Connections = ' + vertConnect)
 
     # When enabled prints what the leaves are
     # print('The leaves are ' + str(leaves(name,number)))
 
     # UNCOMMENT THIS LINE TO PLOT SPANNING TREE OF THE NET
-    # graphNet(findCenters(v, f), faceGraph, 'blue', True,'-')  # plots spanning tree of the net
+    if spanning:
+        graphNet(findCenters(v, f), faceGraph, 'red', 1, False, '-')  # plots spanning tree of the net
 
     # numbers the faces of the graph
     centers = findCenters(v, f)  # finds the center of each face
