@@ -28,6 +28,7 @@ number_label = tk.Label(master=frame1, text="Net Number")
 # number_descriptor = tk.Label(text="Enter a number between 0 and " + str(num_of_nets(name_entry.get())-1))
 num = StringVar()
 number_entry = tk.Entry(frame1, textvariable=num, width=5)
+number_entry.insert(0, "0")
 
 # def update_num_of_nets():
 #     new_number = num_of_nets(name_entry.get())-1
@@ -46,10 +47,16 @@ def return_function():
     plt.close()
     name = name_entry.get()
     number = str(number_entry.get()).zfill(concat_length(name))
+    if int(number) < 0 or int(number) >= num_of_nets(name):
+        number = 0
+        number_entry.delete(0, END)
+        number_entry.insert(0, "0")
     drawNet(name, str(number), numberfaces=num_face.get(), vc=plot_vc.get(), showVertices=show_vertices.get(),
             spanning=show_spanning.get())
     if show_convex_hull.get() and name_entry.get() == "Dodecahedron":
         [convex_area, convex_perimeter] = convex_hull(name, number, True)
+    if show_diameter.get():
+        diameter(name, number, plot=True)
     plt.axis('off')
     plt.savefig("temporary", dpi=100)
     img = ImageTk.PhotoImage(file="temporary.png")
@@ -76,9 +83,9 @@ def return_function():
     net_rg = radius_of_gyration(v, f)
     rg_label.config(text="Radius of Gyration: " + str(net_rg))
 
-    # diameter_label.pack()
-    # diam = diameter(name, number)
-    # diameter_label.config(text="Diameter: " + str(diam))
+    diameter_label.pack()
+    diam = diameter(name, number)
+    diameter_label.config(text="Diameter: " + str(diam))
 
     if show_convex_hull.get() and name_entry.get() == "Dodecahedron":
         convex_area_label.config(text="Area of Convex Hull: " + str(convex_area))
@@ -115,14 +122,12 @@ convex_area_label = Label(frame3, width=50, anchor='w')
 convex_perim_label = Label(frame3, width=50, anchor='w')
 diameter_label = Label(frame3, width=50, anchor='w')
 
-
-
-
 num_face = tk.BooleanVar()
 show_vertices = tk.BooleanVar()
 plot_vc = tk.BooleanVar()
 show_spanning = tk.BooleanVar()
 show_convex_hull = tk.BooleanVar()
+show_diameter = tk.BooleanVar()
 
 c1 = tk.Checkbutton(frame1, text='number faces', variable=num_face, onvalue=True, offvalue=False,
                     command=return_function, width=20, anchor='w')
@@ -139,6 +144,9 @@ c4.pack()
 c5 = tk.Checkbutton(frame1, text='Convex Hull', variable=show_convex_hull, onvalue=True, offvalue=False,
                     command=return_function, width=20, anchor='w')
 c5.pack()
+c6 = tk.Checkbutton(frame1, text='Diameter', variable=show_diameter, onvalue=True, offvalue=False,
+                    command=return_function, width=20, anchor='w')
+c6.pack()
 
 def save():
     my_filetypes = [('SVG', '.svg')]

@@ -373,10 +373,8 @@ def diameter(name, number, plot=False):
         for i in range(0, len(centers)):
             if i in longest_path:
                 verts.append(centers[i])
-        print(verts)
-        print(edg)
         graphNet(centers, edg, 'black', 1, False, '-')
-    diam = len(longest_path)
+    diam = len(longest_path)-1
     return diam
 
 
