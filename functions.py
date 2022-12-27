@@ -957,7 +957,7 @@ def convex_hull(name, number, plot):
 
     # If variable plot is True, plots the convex hull
     if plot:
-        graphNet(v, np.array(hull_edges), "red", False, "-")
+        graphNet(v, np.array(hull_edges), "red", 1, False, "-")
 
     # Returns [area of the convex hull, perimeter of the convex hull
     return [area, perimeter]
