@@ -39,7 +39,7 @@ number_entry.insert(0, "0")
 w = OptionMenu(frame1, name_entry, "Tetrahedron", "Cube", "Octahedron", "Dodecahedron", "Icosahedron")
 w.pack()
 
-number_label.pack()
+number_label.pack(pady=(15, 0))
 # number_descriptor.pack()
 number_entry.pack()
 
@@ -98,7 +98,7 @@ B = Button(frame1, text="Generate Net", command=return_function)
 B.pack()
 
 hamiltonian_label = tk.Label(master=frame1, text="Search by Hamiltonian Cycle")
-hamiltonian_label.pack()
+hamiltonian_label.pack(pady=(15, 0))
 
 hamiltonian_entry = tk.Entry(frame1)
 hamiltonian_entry.pack()
@@ -131,7 +131,7 @@ show_diameter = tk.BooleanVar()
 
 c1 = tk.Checkbutton(frame1, text='number faces', variable=num_face, onvalue=True, offvalue=False,
                     command=return_function, width=20, anchor='w')
-c1.pack()
+c1.pack(pady=(15, 0))
 c2 = tk.Checkbutton(frame1, text='show vertices', variable=show_vertices, onvalue=True, offvalue=False,
                     command=return_function, width=20, anchor='w')
 c2.pack()
@@ -141,7 +141,7 @@ c3.pack()
 c4 = tk.Checkbutton(frame1, text='show spanning tree', variable=show_spanning, onvalue=True, offvalue=False,
                     command=return_function, width=20, anchor='w')
 c4.pack()
-c5 = tk.Checkbutton(frame1, text='Convex Hull', variable=show_convex_hull, onvalue=True, offvalue=False,
+c5 = tk.Checkbutton(frame1, text='Convex Hull (Dodec ONLY)', variable=show_convex_hull, onvalue=True, offvalue=False,
                     command=return_function, width=20, anchor='w')
 c5.pack()
 c6 = tk.Checkbutton(frame1, text='Diameter', variable=show_diameter, onvalue=True, offvalue=False,
