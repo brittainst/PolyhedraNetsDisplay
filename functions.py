@@ -50,8 +50,8 @@ def shift_string(string, shift):
 def reverse_string(string):
     return string[::-1]
 
-def find_net_number(hamiltonian_cycle):
-    x = len(hamiltonian_cycle)
+def net_type_from_string_length(string):
+    x = len(string)
     name = str
     if x == 6:
         name = "Tetrahedron"
@@ -63,6 +63,12 @@ def find_net_number(hamiltonian_cycle):
         name = "Dodecahedron"
     elif x == 22:
         name = "Icosahedron"
+    return name
+
+
+def find_net_number(hamiltonian_cycle):
+    name = net_type_from_string_length(hamiltonian_cycle)
+
     flag = False
     for number in range(0, num_of_nets(name)):
         data = loadFile(name, number)
@@ -322,26 +328,56 @@ diameter is a function that finds the diameter / longest path across the spannin
 
 # TODO: This function not finished yet. I need to go back and write sudo code before finishing
 # TODO: Write a function that calculates facequantity based on the type of net
-def diameter(name, number):
+def diameter(name, number, plot=False):
     data = loadFile(name, number)
     faceGraph = np.array(data["FaceGraph"]["AdjMat"].get("matrix"))
+    v = np.array(data.get("Vertices"))
+    f = np.array(data.get("Faces"))
     # pulls a list of all the numbers of the leaves in the net
     listOfLeaves = leaves(name, number)
+
     # starts an array to track the longest path starting from each leaf
-    longestPathsByVertex = []
+    longest_path = []
     for i in range(0, len(listOfLeaves) - 1):  # iterates through each leaf except the last one
-        pathTracker = [i]  # starts the list with the vertex we are starting with
-        for j in range(0, len(pathTracker)):  # iterates through each path in pathtracker
-            numAdjFound = 0
-            for edge in faceGraph:
-                if int(edge[0]) == i:
-                    if numAdjFound == 0:
-                        pathTracker[j].append(int(edge[1]))
-                    else:
-                        pathTracker.append(pathTracker[j])
-                        pathTracker[len(pathTracker)].append(int(edge[1]))
-        longestPathsByVertex.append(pathTracker)
-    return longestPathsByVertex
+        paths = [[]]
+        unused_vertices = [0]
+        for j in range(1, len(f)):
+            unused_vertices.append(j)
+        paths[0].append(listOfLeaves[i])
+        unused_vertices.remove(listOfLeaves[i])
+        while len(unused_vertices) > 0:
+            for path in paths:
+                end_vertex = path[-1]
+                for edge in faceGraph:
+                    if int(edge[0]) == end_vertex and int(edge[1]) in unused_vertices:
+                        new_path = path.copy()
+                        new_path.append(int(edge[1]))
+                        unused_vertices.remove(int(edge[1]))
+                        paths.append(new_path)
+        lengths_of_paths = []
+        for path in paths:
+            lengths_of_paths.append(len(path))
+        max_length = max(lengths_of_paths)
+        max_index = lengths_of_paths.index(max_length)
+        if len(paths[max_index]) > len(longest_path):
+            longest_path = paths[max_index]
+
+    if plot:
+        centers = findCenters(v, f)
+        verts = []
+        edg = []
+        for i in range(0, len(longest_path)-1):
+            edg.append([])
+            edg[i].append(longest_path[i])
+            edg[i].append(longest_path[i+1])
+        for i in range(0, len(centers)):
+            if i in longest_path:
+                verts.append(centers[i])
+        print(verts)
+        print(edg)
+        graphNet(centers, edg, 'black', 1, False, '-')
+    diam = len(longest_path)
+    return diam
 
 
 '''
