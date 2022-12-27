@@ -36,10 +36,48 @@ def num_of_nets(string):
 
 
 def loadFile(name, number):
-    filename = name + 'Net' + str(number) + '.json'  # Some functions already input number as string, but others do not
+    filename = name + 'Net' + str(number).zfill(concat_length(name)) + '.json'
+    # Some functions already input number as string, but others do not
     with open(filename) as json_file:  # Calls a particular .json file
         data = json.load(json_file)  # Stores the contents of the database as a list
     return data
+
+def shift_string(string, shift):
+    string_1 = string[shift:len(string)]
+    string_2 = string[0:shift]
+    return string_1 + string_2
+
+def reverse_string(string):
+    return string[::-1]
+
+def find_net_number(hamiltonian_cycle):
+    x = len(hamiltonian_cycle)
+    name = str
+    if x == 6:
+        name = "Tetrahedron"
+    elif x == 14:
+        name = "Cube"
+    elif x == 10:
+        name = "Octahedron"
+    elif x == 38:
+        name = "Dodecahedron"
+    elif x == 22:
+        name = "Icosahedron"
+    flag = False
+    for number in range(0, num_of_nets(name)):
+        data = loadFile(name, number)
+        goal = np.array(data.get("CmpString"))
+
+        for k in range(0, len(hamiltonian_cycle)):
+            test = shift_string(hamiltonian_cycle, k-1)
+            test2 = shift_string(reverse_string(hamiltonian_cycle), k-1)
+            if test == goal or test2 == goal:
+                flag = True
+                break
+        if flag:
+            break
+    return number
+
 
 
 ''' 

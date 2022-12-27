@@ -26,7 +26,8 @@ name_entry.set("Dodecahedron")
 # Net Number Selection
 number_label = tk.Label(master=frame1, text="Net Number")
 # number_descriptor = tk.Label(text="Enter a number between 0 and " + str(num_of_nets(name_entry.get())-1))
-number_entry = tk.Entry(frame1)
+num = StringVar()
+number_entry = tk.Entry(frame1, textvariable=num)
 
 # def update_num_of_nets():
 #     new_number = num_of_nets(name_entry.get())-1
@@ -40,6 +41,21 @@ w.pack()
 number_label.pack()
 # number_descriptor.pack()
 number_entry.pack()
+
+hamiltonian_label = tk.Label(master=frame1, text="Search by Hamiltonian Cycle")
+hamiltonian_label.pack()
+
+hamiltonian_entry = tk.Entry(frame1)
+hamiltonian_entry.pack()
+
+def search_by_hamiltonian():
+    number_entry.delete(0, END)
+    number_entry.insert(0, str(find_net_number(hamiltonian_entry.get())))
+    return_function()
+
+
+search_button = Button(frame1, text="search", command=search_by_hamiltonian)
+search_button.pack()
 
 label1 = Label(frame2)
 leaf_label = Label(frame3, width=50, anchor='w')
