@@ -1,11 +1,12 @@
 from functions import *
 
+
 # gets user input on which file to open
 # name = input("Enter the type of polyhedra:")
 # number = input("Enter the net number:")
 
 
-def origami_creator(net_name=' ', net_number=-1, location=' ', plot = False):
+def origami_creator(net_name=' ', net_number=-1, location=' ', plot=False):
     if net_name == ' ':
         net_name = input("Enter the type of polyhedra:")
     if net_number == -1:
@@ -34,7 +35,21 @@ def origami_creator(net_name=' ', net_number=-1, location=' ', plot = False):
             edges.append(durer_edges[i])  # append the edge to the list of edges that make up the boundary.
         else:
             interior_edges.append(durer_edges[i])
-    graphNet(v, interior_edges, 'b', 0.23227777777, False, '-')
+
+    # Determines the correct fold_angle for the origami based on the type of net
+    fold_angle = 1
+    if net_name == 'Tetrahedron':
+        fold_angle = np.arccos(1/3)
+    elif net_name == 'Cube':
+        fold_angle = math.pi/2
+    elif net_name == 'Octahedron':
+        fold_angle = np.arccos(-1/3)
+    elif net_name == 'Dodecahedron':
+        fold_angle = np.arccos(-np.sqrt(5)/5)
+    elif net_name == 'Icosahedron':
+        fold_angle = np.arccos(-np.sqrt(5)/3)
+
+    graphNet(v, interior_edges, 'b', 1-fold_angle/math.pi, False, '-')
     graphNet(v, edges, 'k', 1, False, '-')
     plt.axis('scaled')  # Preserves 1:1 aspect ratio
     plt.axis('off')
@@ -45,6 +60,5 @@ def origami_creator(net_name=' ', net_number=-1, location=' ', plot = False):
 
     if plot:
         plt.show()
-
 
 # origami_creator(location=' ', plot=True)
